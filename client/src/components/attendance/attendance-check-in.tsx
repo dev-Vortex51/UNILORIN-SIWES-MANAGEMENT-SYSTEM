@@ -385,7 +385,7 @@ export function AttendanceCheckIn() {
             </div>
             {isCheckedIn ? (
               <Badge variant="secondary" className="capitalize">
-                {todayCheckIn?.status || "present"}
+                {(todayCheckIn?.dayStatus || "INCOMPLETE").replaceAll("_", " ").toLowerCase()}
               </Badge>
             ) : (
               <Badge variant="outline">Pending</Badge>

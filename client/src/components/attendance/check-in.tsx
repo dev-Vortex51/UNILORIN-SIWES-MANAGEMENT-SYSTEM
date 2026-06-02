@@ -48,8 +48,8 @@ export function AttendanceCheckIn() {
       <div className="flex items-center justify-between">
         <h3 className="font-semibold">Daily Attendance</h3>
         {checkedIn ? (
-          <Badge variant={today?.status === "late" ? "destructive" : "default"}>
-            {today?.status === "late" ? "Late" : "Present"}
+          <Badge variant={today?.punctuality === "LATE" ? "destructive" : "default"}>
+            {today?.punctuality === "LATE" ? "Late" : "Present"}
           </Badge>
         ) : (
           <Badge variant="outline">Not Checked In</Badge>

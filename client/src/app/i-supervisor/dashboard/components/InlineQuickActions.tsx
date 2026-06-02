@@ -52,7 +52,7 @@ const DAY_STATUS_OPTIONS: Array<{ value: DayStatus; label: string }> = [
 ];
 
 function getAttendanceId(record: AttendanceRecord) {
-  return String((record as any).id || record._id || "");
+  return String(record.id || "");
 }
 
 function getIndustrialReview(logbook: any) {

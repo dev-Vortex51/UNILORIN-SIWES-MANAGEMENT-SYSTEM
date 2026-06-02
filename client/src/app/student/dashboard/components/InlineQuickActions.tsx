@@ -79,7 +79,8 @@ export function InlineQuickActions({ placementApproved, onAttendanceRefresh }: I
   const absenceMutation = useMutation({
     mutationFn: () =>
       attendanceService.submitAbsenceRequest({
-        date: absenceDate,
+        startDate: absenceDate,
+        endDate: absenceDate,
         reason: absenceReason.trim(),
       }),
     onSuccess: () => {
