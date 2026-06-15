@@ -25,7 +25,7 @@ const unassignStudentFromSupervisor = async (supervisorId, studentId) => {
     if (supervisor.type === "academic" || supervisor.type === "departmental") {
       await prisma.student.update({
         where: { id: studentId },
-        data: { academicSupervisorId: null },
+        data: { departmentalSupervisorId: null },
       });
     } else {
       await prisma.student.update({

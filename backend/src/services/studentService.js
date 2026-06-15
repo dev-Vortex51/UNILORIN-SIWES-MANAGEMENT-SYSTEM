@@ -376,17 +376,14 @@ const getStudentDashboard = async (studentId) => {
           orderBy: { createdAt: "desc" },
           take: 1,
         },
-        academicSupervisor: {
+        supervisorAssignments: {
           include: {
-            user: {
-              select: { firstName: true, lastName: true, email: true },
-            },
-          },
-        },
-        industrialSupervisor: {
-          include: {
-            user: {
-              select: { firstName: true, lastName: true, email: true },
+            supervisor: {
+              include: {
+                user: {
+                  select: { firstName: true, lastName: true, email: true },
+                },
+              },
             },
           },
         },
@@ -424,12 +421,28 @@ const getStudentDashboard = async (studentId) => {
       }),
     ]);
 
+    // Map supervisors from assignments
+    if (student.supervisorAssignments?.length > 0) {
+      const academicAssignment = student.supervisorAssignments.find(
+        (sa) =>
+          sa.supervisor?.type === "academic" ||
+          sa.supervisor?.type === "departmental",
+      );
+      const industrialAssignment = student.supervisorAssignments.find(
+        (sa) => sa.supervisor?.type === "industrial",
+      );
+
+      student.academicSupervisor = academicAssignment?.supervisor || null;
+      student.departmentalSupervisor = academicAssignment?.supervisor || null;
+      student.industrialSupervisor = industrialAssignment?.supervisor || null;
+    }
+
     // Calculate training progress
     let trainingProgress = 0;
-    if (student.startDate && student.endDate) {
+    if (student.trainingStartDate && student.trainingEndDate) {
       const now = new Date();
-      const start = new Date(student.startDate);
-      const end = new Date(student.endDate);
+      const start = new Date(student.trainingStartDate);
+      const end = new Date(student.trainingEndDate);
       const totalDuration = end - start;
       const elapsedDuration = now - start;
       trainingProgress = Math.min(
@@ -472,7 +485,7 @@ const assignSupervisor = async (studentId, supervisorId, type) => {
     // Update student with supervisor
     const updateData = {};
     if (type === "academic") {
-      updateData.academicSupervisorId = supervisorId;
+      updateData.departmentalSupervisorId = supervisorId;
     } else if (type === "industrial") {
       updateData.industrialSupervisorId = supervisorId;
     }
