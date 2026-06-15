@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { VisitCreateDialog } from "./components/VisitCreateDialog";
 import { VisitDetailsDialog } from "./components/VisitDetailsDialog";
+import { CompleteVisitDialog } from "./components/CompleteVisitDialog";
 import { VisitsTable } from "./components/VisitsTable";
 import { useSupervisorVisits } from "./hooks/useSupervisorVisits";
 
@@ -34,6 +35,8 @@ export default function SupervisorVisitsPage() {
     setSelectedVisit,
     isViewDialogOpen,
     setIsViewDialogOpen,
+    visitToComplete,
+    setVisitToComplete,
     openCreateDialog,
     openEditDialog,
     submit,
@@ -155,7 +158,9 @@ export default function SupervisorVisitsPage() {
           setIsViewDialogOpen(true);
         }}
         onEdit={openEditDialog}
-        onComplete={(id) => completeVisitMutation.mutate(id)}
+        onComplete={(visit) => {
+          setVisitToComplete(visit);
+        }}
         onCancel={(id) => cancelVisitMutation.mutate(id)}
       />
 
@@ -174,6 +179,18 @@ export default function SupervisorVisitsPage() {
         open={isViewDialogOpen}
         onOpenChange={setIsViewDialogOpen}
         visit={selectedVisit}
+      />
+
+      <CompleteVisitDialog
+        open={!!visitToComplete}
+        onOpenChange={(open) => { if (!open) setVisitToComplete(null); }}
+        visit={visitToComplete}
+        onSubmit={(payload) => {
+          if (visitToComplete) {
+            completeVisitMutation.mutate({ id: visitToComplete.id, payload });
+          }
+        }}
+        isSubmitting={completeVisitMutation.isPending}
       />
     </div>
   );

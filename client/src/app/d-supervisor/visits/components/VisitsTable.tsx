@@ -11,7 +11,7 @@ interface VisitsTableProps {
   typeFilter: string;
   onView: (visit: Visit) => void;
   onEdit?: (visit: Visit) => void;
-  onComplete?: (id: string) => void;
+  onComplete?: (visit: Visit) => void;
   onCancel?: (id: string) => void;
   canEditScheduled?: boolean;
   canCompleteScheduled?: boolean;
@@ -120,7 +120,7 @@ export function VisitsTable({
                             {
                               label: "Mark Completed",
                               icon: <CheckCircle2 className="h-3.5 w-3.5" />,
-                              onClick: () => onComplete(visit.id),
+                              onClick: () => onComplete(visit),
                             },
                           ]
                         : []),

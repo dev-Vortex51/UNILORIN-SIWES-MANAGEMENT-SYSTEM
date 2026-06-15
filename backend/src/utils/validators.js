@@ -324,6 +324,21 @@ const visitValidation = {
   completeVisit: Joi.object({
     feedback: Joi.string().max(2000).allow("").optional(),
     score: Joi.number().integer().min(0).max(100).optional(),
+    assessment: Joi.object({
+      type: Joi.string().valid("departmental", "industrial", "final").optional(),
+      technical: Joi.number().min(0).max(100).optional(),
+      communication: Joi.number().min(0).max(100).optional(),
+      punctuality: Joi.number().min(0).max(100).optional(),
+      initiative: Joi.number().min(0).max(100).optional(),
+      teamwork: Joi.number().min(0).max(100).optional(),
+      professionalism: Joi.number().min(0).max(100).optional(),
+      problemSolving: Joi.number().min(0).max(100).optional(),
+      adaptability: Joi.number().min(0).max(100).optional(),
+      strengths: Joi.string().max(1000).allow("").optional(),
+      areasForImprovement: Joi.string().max(1000).allow("").optional(),
+      comment: Joi.string().max(1000).allow("").optional(),
+      recommendation: Joi.string().valid("excellent", "very_good", "good", "fair", "poor").optional(),
+    }).optional(),
   }),
 
   cancelVisit: Joi.object({

@@ -18,7 +18,8 @@ export function useCoordinatorVisits() {
   });
 
   const completeMutation = useMutation({
-    mutationFn: async (id: string) => visitService.completeVisit(id, {}),
+    mutationFn: async ({ id, payload }: { id: string; payload: any }) =>
+      visitService.completeVisit(id, payload),
     onSuccess: () => {
       toast.success("Visit marked as completed");
       queryClient.invalidateQueries({ queryKey: ["coordinator-visits"] });

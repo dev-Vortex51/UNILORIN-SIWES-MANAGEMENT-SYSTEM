@@ -11,6 +11,7 @@ import {
   PageHeader,
 } from "@/components/design-system";
 import { VisitDetailsDialog } from "@/app/d-supervisor/visits/components/VisitDetailsDialog";
+import { CompleteVisitDialog } from "@/app/d-supervisor/visits/components/CompleteVisitDialog";
 import { VisitsTable } from "@/app/d-supervisor/visits/components/VisitsTable";
 import type { Visit } from "@/app/d-supervisor/visits/types";
 import { useCoordinatorVisits } from "./hooks/useCoordinatorVisits";
@@ -21,6 +22,7 @@ export default function CoordinatorVisitsPage() {
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [selectedVisit, setSelectedVisit] = useState<Visit | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [visitToComplete, setVisitToComplete] = useState<Visit | null>(null);
 
   const { visits, isLoading, isError, completeMutation, cancelMutation } =
     useCoordinatorVisits();
@@ -141,7 +143,9 @@ export default function CoordinatorVisitsPage() {
           setSelectedVisit(visit);
           setIsViewDialogOpen(true);
         }}
-        onComplete={(id) => completeMutation.mutate(id)}
+        onComplete={(visit) => {
+          setVisitToComplete(visit);
+        }}
         onCancel={(id) => cancelMutation.mutate(id)}
         canEditScheduled={false}
         canCompleteScheduled
@@ -152,6 +156,18 @@ export default function CoordinatorVisitsPage() {
         open={isViewDialogOpen}
         onOpenChange={setIsViewDialogOpen}
         visit={selectedVisit}
+      />
+
+      <CompleteVisitDialog
+        open={!!visitToComplete}
+        onOpenChange={(open) => { if (!open) setVisitToComplete(null); }}
+        visit={visitToComplete}
+        onSubmit={(payload) => {
+          if (visitToComplete) {
+            completeMutation.mutate({ id: visitToComplete.id, payload });
+          }
+        }}
+        isSubmitting={completeMutation.isPending}
       />
     </div>
   );

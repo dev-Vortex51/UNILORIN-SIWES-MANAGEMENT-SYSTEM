@@ -13,7 +13,7 @@ const prisma = getPrismaClient();
 
 const createAssessment = async (assessmentData, supervisorId) => {
   try {
-    const { student: studentId, type } = assessmentData;
+    const { student: studentId, type, visitId } = assessmentData;
 
     const student = await prisma.student.findUnique({
       where: { id: studentId },
@@ -48,6 +48,24 @@ const createAssessment = async (assessmentData, supervisorId) => {
       );
     }
 
+    // If visitId is provided, verify the visit exists and belongs to this student
+    if (visitId) {
+      const visit = await prisma.visit.findUnique({
+        where: { id: visitId },
+      });
+
+      if (!visit) {
+        throw new ApiError(HTTP_STATUS.NOT_FOUND, "Visit not found");
+      }
+
+      if (visit.studentId !== studentId) {
+        throw new ApiError(
+          HTTP_STATUS.BAD_REQUEST,
+          "Visit does not belong to this student",
+        );
+      }
+    }
+
     const existingAssessment = await prisma.assessment.findFirst({
       where: { studentId, supervisorId, type },
     });
@@ -64,6 +82,7 @@ const createAssessment = async (assessmentData, supervisorId) => {
         studentId,
         supervisorId,
         type,
+        visitId,
         technical: assessmentData.technical || 0,
         communication: assessmentData.communication || 0,
         punctuality: assessmentData.punctuality || 0,

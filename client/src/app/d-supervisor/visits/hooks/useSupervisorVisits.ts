@@ -31,6 +31,7 @@ export function useSupervisorVisits() {
   const [form, setForm] = useState<VisitFormState>(defaultForm);
   const [selectedVisit, setSelectedVisit] = useState<Visit | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [visitToComplete, setVisitToComplete] = useState<Visit | null>(null);
 
   const dashboardQuery = useQuery({
     queryKey: ["supervisor-dashboard", supervisorId],
@@ -81,10 +82,12 @@ export function useSupervisorVisits() {
   });
 
   const completeVisitMutation = useMutation({
-    mutationFn: async (id: string) => visitService.completeVisit(id, {}),
+    mutationFn: async ({ id, payload }: { id: string; payload: any }) =>
+      visitService.completeVisit(id, payload),
     onSuccess: () => {
       toast.success("Visit marked as completed");
       queryClient.invalidateQueries({ queryKey: ["visits", supervisorId] });
+      setVisitToComplete(null);
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || "Failed to complete visit");
@@ -157,6 +160,8 @@ export function useSupervisorVisits() {
     setSelectedVisit,
     isViewDialogOpen,
     setIsViewDialogOpen,
+    visitToComplete,
+    setVisitToComplete,
     openCreateDialog,
     openEditDialog,
     submit,
