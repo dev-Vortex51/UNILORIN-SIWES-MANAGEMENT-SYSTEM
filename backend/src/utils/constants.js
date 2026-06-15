@@ -20,7 +20,8 @@ const USER_ROLES = {
   DEPT_SUPERVISOR: "academic_supervisor",
 };
 
-// Backward compatibility alias for newly added modules expecting ROLES
+// Backward compatibility alias (deprecated — use USER_ROLES instead)
+/** @deprecated Use USER_ROLES */
 const ROLES = USER_ROLES;
 
 /**

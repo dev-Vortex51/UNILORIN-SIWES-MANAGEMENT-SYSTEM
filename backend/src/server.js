@@ -10,6 +10,7 @@ const { connectDB, setupGracefulShutdown } = require("./config/database");
 const logger = require("./utils/logger");
 const { initializeSocket } = require("./realtime/socket");
 const { startEmailWorker, stopEmailWorker } = require("./jobs/emailQueue");
+const { startScheduler, stopScheduler } = require("./jobs/scheduler");
 const { closeRedisClient } = require("./config/redis");
 
 /**
@@ -25,6 +26,7 @@ const startServer = async () => {
     const httpServer = http.createServer(app);
     initializeSocket(httpServer);
     startEmailWorker();
+    startScheduler();
 
     const server = httpServer.listen(config.port, () => {
       logger.info(`
@@ -47,10 +49,12 @@ const startServer = async () => {
     setupGracefulShutdown();
     process.on("SIGTERM", async () => {
       await stopEmailWorker();
+      await stopScheduler();
       await closeRedisClient();
     });
     process.on("SIGINT", async () => {
       await stopEmailWorker();
+      await stopScheduler();
       await closeRedisClient();
     });
 

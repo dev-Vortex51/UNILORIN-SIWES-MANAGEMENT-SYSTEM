@@ -459,7 +459,7 @@ model Supervisor {
 model Placement {
   id      String          @id @default(uuid())
   studentId String
-  student Student         @relation(fields: [studentId], references: [id])
+  student Student         @relation(fields: [studentId], references: [id], onDelete: Cascade)
   
   // Company information
   companyName    String
@@ -536,7 +536,7 @@ model Placement {
 model Logbook {
   id        String   @id @default(uuid())
   studentId String
-  student   Student  @relation(fields: [studentId], references: [id])
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   
   // Week information
   weekNumber Int
@@ -608,11 +608,11 @@ model LogbookReview {
 model Assessment {
   id           String           @id @default(uuid())
   studentId    String
-  student      Student          @relation(fields: [studentId], references: [id])
+  student      Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
   supervisorId String
   supervisor   Supervisor       @relation(fields: [supervisorId], references: [id])
   placementId  String?
-  placement    Placement?       @relation(fields: [placementId], references: [id])
+  placement    Placement?       @relation(fields: [placementId], references: [id], onDelete: SetNull)
   type         AssessmentType
   
   // Scores (out of 100)
@@ -659,11 +659,11 @@ model Assessment {
 model Evaluation {
   id           String            @id @default(uuid())
   studentId    String
-  student      Student           @relation(fields: [studentId], references: [id])
+  student      Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
   supervisorId String
   supervisor   Supervisor        @relation(fields: [supervisorId], references: [id])
   placementId  String?
-  placement    Placement?        @relation(fields: [placementId], references: [id])
+  placement    Placement?        @relation(fields: [placementId], references: [id], onDelete: SetNull)
   type         EvaluationType    @default(midterm)
   status       EvaluationStatus  @default(draft)
 
@@ -701,11 +701,11 @@ model Evaluation {
 model Visit {
   id           String      @id @default(uuid())
   studentId    String
-  student      Student     @relation(fields: [studentId], references: [id])
+  student      Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
   supervisorId String
   supervisor   Supervisor  @relation(fields: [supervisorId], references: [id])
   placementId  String?
-  placement    Placement?  @relation(fields: [placementId], references: [id])
+  placement    Placement?  @relation(fields: [placementId], references: [id], onDelete: SetNull)
   visitDate    DateTime
   timezone     String      @default("Africa/Lagos")
   type         VisitType   @default(physical)
@@ -731,9 +731,9 @@ model Visit {
 model ComplianceForm {
   id            String               @id @default(uuid())
   studentId     String
-  student       Student              @relation(fields: [studentId], references: [id])
+  student       Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
   placementId   String?
-  placement     Placement?           @relation(fields: [placementId], references: [id])
+  placement     Placement?           @relation(fields: [placementId], references: [id], onDelete: SetNull)
   formType      ComplianceFormType
   title         String?
   status        ComplianceFormStatus @default(draft)
@@ -760,9 +760,9 @@ model ComplianceForm {
 model TechnicalReport {
   id            String                @id @default(uuid())
   studentId     String
-  student       Student               @relation(fields: [studentId], references: [id])
+  student       Student               @relation(fields: [studentId], references: [id], onDelete: Cascade)
   placementId   String?
-  placement     Placement?            @relation(fields: [placementId], references: [id])
+  placement     Placement?            @relation(fields: [placementId], references: [id], onDelete: SetNull)
   title         String?
   abstract      String?
   status        TechnicalReportStatus @default(draft)
@@ -788,9 +788,9 @@ model TechnicalReport {
 model Attendance {
   id         String    @id @default(uuid())
   studentId  String
-  student    Student   @relation(fields: [studentId], references: [id])
+  student    Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
   placementId String
-  placement  Placement @relation(fields: [placementId], references: [id])
+  placement  Placement @relation(fields: [placementId], references: [id], onDelete: Cascade)
   date       DateTime
   
   // Time tracking
@@ -940,11 +940,11 @@ model Invitation {
 model SupervisorAssignment {
   id           String                     @id @default(uuid())
   studentId    String
-  student      Student                    @relation(fields: [studentId], references: [id])
+  student      Student                    @relation(fields: [studentId], references: [id], onDelete: Cascade)
   supervisorId String
   supervisor   Supervisor                 @relation(fields: [supervisorId], references: [id])
   placementId  String?
-  placement    Placement?                 @relation(fields: [placementId], references: [id])
+  placement    Placement?                 @relation(fields: [placementId], references: [id], onDelete: SetNull)
   status       SupervisorAssignmentStatus @default(active)
   assignedAt   DateTime                   @default(now())
   revokedAt    DateTime?

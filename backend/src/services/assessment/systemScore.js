@@ -106,6 +106,7 @@ const calculateGradeFromPercentage = (score) => {
   if (score >= 80) return "B";
   if (score >= 70) return "C";
   if (score >= 60) return "D";
+  if (score >= 50) return "E";
   return "F";
 };
 
