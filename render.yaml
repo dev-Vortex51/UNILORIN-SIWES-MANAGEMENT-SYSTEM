@@ -29,7 +29,7 @@ services:
       - key: ALLOWED_ORIGINS
         sync: false
       - key: EMAIL_PROVIDER
-        value: sendgrid
+        value: brevo
       - key: SENDGRID_API_KEY
         sync: false
       - key: SENDGRID_FROM
@@ -45,6 +45,10 @@ services:
       - key: SMTP_PASS
         sync: false
       - key: EMAIL_FROM
+        sync: false
+      - key: BREVO_KEY
+        sync: false
+      - key: BREVO_FROM
         sync: false
       - key: CLOUDINARY_CLOUD_NAME
         sync: false

@@ -61,6 +61,10 @@ const config = {
     apiKey: process.env.SENDGRID_API_KEY,
     from: process.env.SENDGRID_FROM || process.env.EMAIL_FROM,
   },
+  brevo: {
+    apiKey: process.env.BREVO_KEY,
+    from: process.env.BREVO_FROM || process.env.EMAIL_FROM,
+  },
 
   // CORS
   cors: {

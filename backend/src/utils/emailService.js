@@ -20,6 +20,13 @@ class EmailService {
     try {
       const preferredProvider = config.email.provider;
 
+      if (preferredProvider === "brevo" && config.brevo?.apiKey) {
+        this.provider = "brevo";
+        this.initialized = true;
+        logger.info("Email service initialized with Brevo API");
+        return;
+      }
+
       if (preferredProvider === "resend" && config.resend?.apiKey) {
         this.provider = "resend";
         this.initialized = true;
@@ -32,6 +39,12 @@ class EmailService {
         this.initialized = true;
         logger.info("Email service initialized with SendGrid API");
         return;
+      }
+
+      if (preferredProvider === "brevo" && !config.brevo?.apiKey) {
+        throw new Error(
+          "EMAIL_PROVIDER is set to brevo but BREVO_KEY is not configured",
+        );
       }
 
       if (preferredProvider === "resend" && !config.resend?.apiKey) {
@@ -221,6 +234,10 @@ class EmailService {
   async dispatchEmail({ to, subject, html, text }) {
     await this.ensureInitialized();
 
+    if (this.provider === "brevo") {
+      return this.sendWithBrevo({ to, subject, html, text });
+    }
+
     if (this.provider === "resend") {
       return this.sendWithResend({ to, subject, html, text });
     }
@@ -270,6 +287,36 @@ class EmailService {
 
     const data = await response.json();
     return { messageId: data?.id };
+  }
+
+  async sendWithBrevo({ to, subject, html, text }) {
+    const from = config.brevo.from || config.email.from;
+    const parsed = this.parseFromAddress(from);
+
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": config.brevo.apiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        sender: { name: parsed.name, email: parsed.email },
+        to: Array.isArray(to)
+          ? to.map((email) => ({ email }))
+          : [{ email: to }],
+        subject,
+        htmlContent: html,
+        textContent: text,
+      }),
+    });
+
+    if (!response.ok) {
+      const details = await response.text();
+      throw new Error(`Brevo API error (${response.status}): ${details}`);
+    }
+
+    const data = await response.json();
+    return { messageId: data?.messageId };
   }
 
   async sendWithSendGrid({ to, subject, html, text }) {
