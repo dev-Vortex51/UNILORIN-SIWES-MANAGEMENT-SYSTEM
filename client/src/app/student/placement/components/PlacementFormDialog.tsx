@@ -194,6 +194,42 @@ export function PlacementFormDialog({
               </div>
             </div>
 
+            <div className="pt-4 border-t">
+              <h4 className="font-semibold mb-3">Working Hours</h4>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="workStartTime">Opening Time *</Label>
+                  <Input
+                    id="workStartTime"
+                    type="time"
+                    value={formData.workStartTime}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        workStartTime: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="workEndTime">Closing Time *</Label>
+                  <Input
+                    id="workEndTime"
+                    type="time"
+                    value={formData.workEndTime}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        workEndTime: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
             <AcceptanceLetterField formData={formData} setFormData={setFormData} />
 
             <div className="pt-4 border-t">

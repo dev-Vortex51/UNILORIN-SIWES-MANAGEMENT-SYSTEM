@@ -156,6 +156,8 @@ const updatePlacement = async (
       "supervisorPosition",
       "startDate",
       "endDate",
+      "workStartTime",
+      "workEndTime",
       "expectedLearningOutcomes",
       "specialRequirements",
     ];

@@ -7,6 +7,8 @@ export interface PlacementFormData {
   position: string;
   startDate: string;
   endDate: string;
+  workStartTime: string;
+  workEndTime: string;
   supervisorName: string;
   supervisorEmail: string;
   supervisorPhone: string;

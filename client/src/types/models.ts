@@ -35,6 +35,8 @@ export interface Placement {
   department?: string;
   startDate: string;
   endDate: string;
+  workStartTime?: string;
+  workEndTime?: string;
   acceptanceLetter?: string;
   acceptanceLetterPath?: string;
   status: "pending" | "approved" | "rejected" | "withdrawn";

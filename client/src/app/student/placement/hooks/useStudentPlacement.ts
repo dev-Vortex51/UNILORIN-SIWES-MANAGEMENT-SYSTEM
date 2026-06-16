@@ -14,6 +14,8 @@ const defaultFormData: PlacementFormData = {
   position: "",
   startDate: "",
   endDate: "",
+  workStartTime: "08:00",
+  workEndTime: "17:00",
   supervisorName: "",
   supervisorEmail: "",
   supervisorPhone: "",
@@ -119,6 +121,8 @@ export function useStudentPlacement() {
       position: placement.position || "",
       startDate: placement.startDate?.split("T")[0] || "",
       endDate: placement.endDate?.split("T")[0] || "",
+      workStartTime: placement.workStartTime || "08:00",
+      workEndTime: placement.workEndTime || "17:00",
       supervisorName: placement.supervisorName || "",
       supervisorEmail: placement.supervisorEmail || "",
       supervisorPhone: placement.supervisorPhone || "",
@@ -149,6 +153,8 @@ export function useStudentPlacement() {
     payload.append("position", formData.position);
     payload.append("startDate", formData.startDate);
     payload.append("endDate", formData.endDate);
+    payload.append("workStartTime", formData.workStartTime);
+    payload.append("workEndTime", formData.workEndTime);
     payload.append("supervisorName", formData.supervisorName);
     payload.append("supervisorEmail", formData.supervisorEmail);
     payload.append("supervisorPhone", formData.supervisorPhone);

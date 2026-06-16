@@ -93,6 +93,8 @@ const createPlacement = async (studentId, placementData, acceptanceLetterFile = 
         supervisorPosition: placementData.supervisorPosition,
         startDate: new Date(placementData.startDate),
         endDate: new Date(placementData.endDate),
+        workStartTime: placementData.workStartTime || "08:00",
+        workEndTime: placementData.workEndTime || "17:00",
         acceptanceLetter:
           uploadedLetter?.acceptanceLetter || null,
         acceptanceLetterPath:
