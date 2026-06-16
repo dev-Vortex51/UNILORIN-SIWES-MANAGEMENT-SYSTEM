@@ -63,7 +63,7 @@ export function IAssessmentCreateDialog({
         <DialogHeader>
           <DialogTitle>New Assessment</DialogTitle>
           <DialogDescription>
-            Rate the student's performance during their industrial training
+            Rate the student&apos;s performance during their industrial training
           </DialogDescription>
         </DialogHeader>
 
