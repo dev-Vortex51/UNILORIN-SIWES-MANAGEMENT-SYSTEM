@@ -1,10 +1,9 @@
-import { Award, Calendar, ClipboardCheck, Eye, Plus } from "lucide-react";
+import { Award, Calendar, ClipboardCheck } from "lucide-react";
 import { LoadingCard } from "@/components/ui/loading";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Assessment } from "../types";
-import { getScoreBadge, getStatusBadge } from "../utils/assessment-ui";
+import { getScoreBadge, getStatusBadge, getStudentName, getStudentMatric, calcAverageScore } from "../utils/assessment-ui";
 
 interface AssessmentsListProps {
   assessments: Assessment[];
@@ -40,13 +39,9 @@ export function AssessmentsList({
               <p className="mt-1 text-muted-foreground">
                 {searchQuery || statusFilter !== "all"
                   ? "Try adjusting your search or filter criteria"
-                  : "Create your first assessment to evaluate student performance"}
+                  : "Submit your first assessment to rate a student's performance"}
               </p>
             </div>
-            <Button disabled>
-              <Plus className="mr-2 h-4 w-4" />
-              Create First Assessment
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -62,7 +57,8 @@ export function AssessmentsList({
         <div className="space-y-3">
           {assessments.map((assessment) => {
             const statusConfig = getStatusBadge(assessment.status);
-            const scoreConfig = getScoreBadge(assessment.totalScore || 0);
+            const avgScore = calcAverageScore(assessment);
+            const scoreConfig = avgScore != null ? getScoreBadge(avgScore) : null;
 
             return (
               <div
@@ -75,9 +71,9 @@ export function AssessmentsList({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <p className="font-medium">{assessment.student?.name || "Unknown Student"}</p>
+                      <p className="font-medium">{getStudentName(assessment)}</p>
                       <span className="text-sm text-muted-foreground">
-                        ({assessment.student?.matricNumber || "N/A"})
+                        ({getStudentMatric(assessment)})
                       </span>
                     </div>
                     <div className="mt-1 flex items-center gap-4 text-sm text-muted-foreground">
@@ -87,10 +83,10 @@ export function AssessmentsList({
                           ? new Date(assessment.createdAt).toLocaleDateString()
                           : "N/A"}
                       </span>
-                      {assessment.totalScore !== undefined ? (
+                      {avgScore != null ? (
                         <span className="flex items-center gap-1">
                           <Award className="h-3 w-3" />
-                          Score: {assessment.totalScore}%
+                          Score: {avgScore}%
                         </span>
                       ) : null}
                     </div>
@@ -98,16 +94,12 @@ export function AssessmentsList({
                 </div>
 
                 <div className="flex items-center gap-3">
-                  {assessment.totalScore !== undefined ? (
+                  {scoreConfig ? (
                     <Badge variant={scoreConfig.variant} className="min-w-[80px] justify-center">
                       {scoreConfig.label}
                     </Badge>
                   ) : null}
                   <Badge variant={statusConfig.variant}>{statusConfig.text}</Badge>
-                  <Button variant="outline" size="sm" disabled>
-                    <Eye className="mr-2 h-4 w-4" />
-                    View
-                  </Button>
                 </div>
               </div>
             );

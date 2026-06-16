@@ -1,22 +1,48 @@
-export interface AssessmentStudent {
-  name?: string;
-  matricNumber?: string;
+export interface AssessmentScore {
+  technical: number;
+  communication: number;
+  punctuality: number;
+  initiative: number;
+  teamwork: number;
+  professionalism?: number;
+  problemSolving?: number;
+  adaptability?: number;
 }
 
 export interface Assessment {
   id: string;
-  student?: AssessmentStudent;
-  status: "draft" | "completed" | "submitted" | string;
-  totalScore?: number;
-  createdAt?: string;
+  studentId: string;
+  type: "industrial" | "departmental" | "final";
+  status: "pending" | "submitted" | "completed";
+  technical: number;
+  communication: number;
+  punctuality: number;
+  initiative: number;
+  teamwork: number;
+  professionalism?: number;
+  problemSolving?: number;
+  adaptability?: number;
+  grade?: string;
+  recommendation?: string;
+  strengths?: string;
+  areasForImprovement?: string;
+  comment?: string;
+  createdAt: string;
+  student?: {
+    id: string;
+    matricNumber: string;
+    user: {
+      firstName: string;
+      lastName: string;
+    };
+  };
 }
 
-export interface AssessmentStatusBadge {
-  variant: "default" | "destructive" | "outline" | "secondary";
-  text: string;
-}
-
-export interface AssessmentScoreBadge {
-  variant: "default" | "destructive" | "outline" | "secondary";
-  label: string;
+export interface StudentOption {
+  id: string;
+  matricNumber: string;
+  user: {
+    firstName: string;
+    lastName: string;
+  };
 }

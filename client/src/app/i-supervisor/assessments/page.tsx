@@ -5,6 +5,7 @@ import { AssessmentGuidelines } from "./components/AssessmentGuidelines";
 import { AssessmentsHeader } from "./components/AssessmentsHeader";
 import { AssessmentsList } from "./components/AssessmentsList";
 import { AssessmentStats } from "./components/AssessmentStats";
+import { IAssessmentCreateDialog } from "./components/IAssessmentCreateDialog";
 import { useIndustrySupervisorAssessments } from "./hooks/useIndustrySupervisorAssessments";
 
 export default function AssessmentsPage() {
@@ -16,14 +17,31 @@ export default function AssessmentsPage() {
     assessments,
     filteredAssessments,
     completedCount,
-    draftCount,
+    pendingCount,
     averageScore,
     isLoading,
+    isCreateDialogOpen,
+    setIsCreateDialogOpen,
+    students,
+    selectedStudent,
+    setSelectedStudent,
+    scores,
+    setScores,
+    strengths,
+    setStrengths,
+    areasForImprovement,
+    setAreasForImprovement,
+    comment,
+    setComment,
+    recommendation,
+    setRecommendation,
+    handleCreateAssessment,
+    isSubmitting,
   } = useIndustrySupervisorAssessments();
 
   return (
     <div className="space-y-6">
-      <AssessmentsHeader />
+      <AssessmentsHeader onCreateClick={() => setIsCreateDialogOpen(true)} />
 
       <AssessmentFilters
         searchQuery={searchQuery}
@@ -35,7 +53,7 @@ export default function AssessmentsPage() {
       <AssessmentStats
         total={assessments.length}
         completed={completedCount}
-        drafts={draftCount}
+        drafts={pendingCount}
         averageScore={averageScore}
       />
 
@@ -47,6 +65,26 @@ export default function AssessmentsPage() {
       />
 
       <AssessmentGuidelines />
+
+      <IAssessmentCreateDialog
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+        students={students}
+        selectedStudent={selectedStudent}
+        onStudentChange={setSelectedStudent}
+        scores={scores}
+        onScoresChange={setScores}
+        strengths={strengths}
+        onStrengthsChange={setStrengths}
+        areasForImprovement={areasForImprovement}
+        onAreasForImprovementChange={setAreasForImprovement}
+        comment={comment}
+        onCommentChange={setComment}
+        recommendation={recommendation}
+        onRecommendationChange={setRecommendation}
+        onSubmit={handleCreateAssessment}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }

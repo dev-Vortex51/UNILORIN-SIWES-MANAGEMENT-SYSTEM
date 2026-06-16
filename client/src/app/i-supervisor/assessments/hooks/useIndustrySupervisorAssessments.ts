@@ -1,26 +1,87 @@
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/components/providers/auth-provider";
 import { useUrlSearchState } from "@/hooks/useUrlSearchState";
-import type { Assessment } from "../types";
+import { apiClient } from "@/lib/api-client";
+import { toast } from "sonner";
+import type { Assessment, AssessmentScore, StudentOption } from "../types";
 import { filterAssessments } from "../utils/assessment-ui";
+
+const defaultScores: AssessmentScore = {
+  technical: 0,
+  communication: 0,
+  punctuality: 0,
+  initiative: 0,
+  teamwork: 0,
+};
 
 export function useIndustrySupervisorAssessments() {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const supervisorId = user?.profileData?.id;
   const { searchQuery, setSearchQuery } = useUrlSearchState();
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState("");
+  const [scores, setScores] = useState<AssessmentScore>(defaultScores);
+  const [strengths, setStrengths] = useState("");
+  const [areasForImprovement, setAreasForImprovement] = useState("");
+  const [comment, setComment] = useState("");
+  const [recommendation, setRecommendation] = useState<"excellent" | "very_good" | "good" | "fair" | "poor">("good");
 
-  const assessmentsQuery = useQuery({
-    queryKey: ["assessments", user?.id, statusFilter],
+  const dashboardQuery = useQuery({
+    queryKey: ["supervisor-dashboard", supervisorId],
     queryFn: async () => {
-      return { data: [] as Assessment[] };
+      const response = await apiClient.get(`/supervisors/${supervisorId}/dashboard`);
+      return response.data.data;
     },
-    enabled: !!user?.id,
+    enabled: !!supervisorId,
   });
 
-  const assessments = useMemo(
-    () => assessmentsQuery.data?.data || [],
+  const assessmentsQuery = useQuery({
+    queryKey: ["assessments", supervisorId],
+    queryFn: async () => {
+      const response = await apiClient.get("/assessments", {
+        params: { supervisor: supervisorId },
+      });
+      return response.data.data || [];
+    },
+    enabled: !!supervisorId,
+  });
+
+  const resetForm = () => {
+    setSelectedStudent("");
+    setScores(defaultScores);
+    setStrengths("");
+    setAreasForImprovement("");
+    setComment("");
+    setRecommendation("good");
+  };
+
+  const createAssessmentMutation = useMutation({
+    mutationFn: async (assessmentData: any) => {
+      const response = await apiClient.post("/assessments", assessmentData);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Assessment submitted successfully");
+      queryClient.invalidateQueries({ queryKey: ["assessments", supervisorId] });
+      setIsCreateDialogOpen(false);
+      resetForm();
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Failed to create assessment");
+    },
+  });
+
+  const assessments = useMemo<Assessment[]>(
+    () => assessmentsQuery.data || [],
     [assessmentsQuery.data],
+  );
+
+  const students = useMemo<StudentOption[]>(
+    () => dashboardQuery.data?.supervisor?.assignedStudents || [],
+    [dashboardQuery.data],
   );
 
   const filteredAssessments = useMemo(
@@ -37,19 +98,33 @@ export function useIndustrySupervisorAssessments() {
     [assessments],
   );
 
-  const draftCount = useMemo(
-    () => assessments.filter((assessment) => assessment.status === "draft").length,
+  const pendingCount = useMemo(
+    () => assessments.filter((assessment) => assessment.status === "pending").length,
     [assessments],
   );
 
   const averageScore = useMemo(() => {
-    if (!assessments.length) return 0;
-
-    return Math.round(
-      assessments.reduce((sum, assessment) => sum + (assessment.totalScore || 0), 0) /
-        assessments.length,
-    );
+    const withScores = assessments.filter((a) => a.technical != null);
+    if (!withScores.length) return 0;
+    const sum = withScores.reduce((acc, a) => {
+      const avg = (a.technical + a.communication + a.punctuality + a.initiative + a.teamwork) / 5;
+      return acc + avg;
+    }, 0);
+    return Math.round(sum / withScores.length);
   }, [assessments]);
+
+  const handleCreateAssessment = () => {
+    const assessmentData = {
+      student: selectedStudent,
+      type: "industrial",
+      scores,
+      strengths,
+      areasForImprovement,
+      comment,
+      recommendation,
+    };
+    createAssessmentMutation.mutate(assessmentData);
+  };
 
   return {
     searchQuery,
@@ -59,8 +134,25 @@ export function useIndustrySupervisorAssessments() {
     assessments,
     filteredAssessments,
     completedCount,
-    draftCount,
+    pendingCount,
     averageScore,
-    isLoading: assessmentsQuery.isLoading,
+    isLoading: assessmentsQuery.isLoading || dashboardQuery.isLoading,
+    isCreateDialogOpen,
+    setIsCreateDialogOpen,
+    students,
+    selectedStudent,
+    setSelectedStudent,
+    scores,
+    setScores,
+    strengths,
+    setStrengths,
+    areasForImprovement,
+    setAreasForImprovement,
+    comment,
+    setComment,
+    recommendation,
+    setRecommendation,
+    handleCreateAssessment,
+    isSubmitting: createAssessmentMutation.isPending,
   };
 }

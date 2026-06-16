@@ -9,6 +9,7 @@ import {
   BookOpen,
   Settings,
   Clock,
+  ClipboardCheck,
 } from "lucide-react";
 
 const navItems = [
@@ -16,6 +17,7 @@ const navItems = [
   { title: "My Students", href: "/i-supervisor/students", icon: Users },
   { title: "Logbooks", href: "/i-supervisor/logbooks", icon: BookOpen },
   { title: "Attendance", href: "/i-supervisor/attendance", icon: Clock },
+  { title: "Assessments", href: "/i-supervisor/assessments", icon: ClipboardCheck },
   { title: "Settings", href: "/i-supervisor/settings", icon: Settings },
 ];
 
