@@ -4,16 +4,8 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { useUrlSearchState } from "@/hooks/useUrlSearchState";
 import { apiClient } from "@/lib/api-client";
 import { toast } from "sonner";
-import type { Assessment, AssessmentScore, StudentOption } from "../types";
+import type { Assessment, StudentOption } from "../types";
 import { filterAssessments } from "../utils/assessment-ui";
-
-const defaultScores: AssessmentScore = {
-  technical: 0,
-  communication: 0,
-  punctuality: 0,
-  initiative: 0,
-  teamwork: 0,
-};
 
 export function useIndustrySupervisorAssessments() {
   const { user } = useAuth();
@@ -23,11 +15,9 @@ export function useIndustrySupervisorAssessments() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState("");
-  const [scores, setScores] = useState<AssessmentScore>(defaultScores);
   const [strengths, setStrengths] = useState("");
   const [areasForImprovement, setAreasForImprovement] = useState("");
   const [comment, setComment] = useState("");
-  const [recommendation, setRecommendation] = useState<"excellent" | "very_good" | "good" | "fair" | "poor">("good");
 
   const dashboardQuery = useQuery({
     queryKey: ["supervisor-dashboard", supervisorId],
@@ -51,11 +41,9 @@ export function useIndustrySupervisorAssessments() {
 
   const resetForm = () => {
     setSelectedStudent("");
-    setScores(defaultScores);
     setStrengths("");
     setAreasForImprovement("");
     setComment("");
-    setRecommendation("good");
   };
 
   const createAssessmentMutation = useMutation({
@@ -64,13 +52,13 @@ export function useIndustrySupervisorAssessments() {
       return response.data;
     },
     onSuccess: () => {
-      toast.success("Assessment submitted successfully");
+      toast.success("Feedback submitted successfully");
       queryClient.invalidateQueries({ queryKey: ["assessments", supervisorId] });
       setIsCreateDialogOpen(false);
       resetForm();
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "Failed to create assessment");
+      toast.error(error?.response?.data?.message || "Failed to submit feedback");
     },
   });
 
@@ -103,25 +91,13 @@ export function useIndustrySupervisorAssessments() {
     [assessments],
   );
 
-  const averageScore = useMemo(() => {
-    const withScores = assessments.filter((a) => a.technical != null);
-    if (!withScores.length) return 0;
-    const sum = withScores.reduce((acc, a) => {
-      const avg = (a.technical + a.communication + a.punctuality + a.initiative + a.teamwork) / 5;
-      return acc + avg;
-    }, 0);
-    return Math.round(sum / withScores.length);
-  }, [assessments]);
-
   const handleCreateAssessment = () => {
     const assessmentData = {
       student: selectedStudent,
       type: "industrial",
-      scores,
       strengths,
       areasForImprovement,
       comment,
-      recommendation,
     };
     createAssessmentMutation.mutate(assessmentData);
   };
@@ -135,23 +111,18 @@ export function useIndustrySupervisorAssessments() {
     filteredAssessments,
     completedCount,
     pendingCount,
-    averageScore,
     isLoading: assessmentsQuery.isLoading || dashboardQuery.isLoading,
     isCreateDialogOpen,
     setIsCreateDialogOpen,
     students,
     selectedStudent,
     setSelectedStudent,
-    scores,
-    setScores,
     strengths,
     setStrengths,
     areasForImprovement,
     setAreasForImprovement,
     comment,
     setComment,
-    recommendation,
-    setRecommendation,
     handleCreateAssessment,
     isSubmitting: createAssessmentMutation.isPending,
   };

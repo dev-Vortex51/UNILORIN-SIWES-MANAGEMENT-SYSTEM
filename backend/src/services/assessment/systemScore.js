@@ -51,7 +51,9 @@ const calculateLogbookCompletion = (logbooks, placement) => {
 
 const calculateAssessmentComponent = (assessments) => {
   const usable = assessments.filter(
-    (assessment) => assessment.status === ASSESSMENT_STATUS.COMPLETED,
+    (assessment) =>
+      assessment.status === ASSESSMENT_STATUS.COMPLETED &&
+      assessment.type !== "industrial",
   );
 
   const score = average(usable.map((assessment) => calculateScore(assessment)));

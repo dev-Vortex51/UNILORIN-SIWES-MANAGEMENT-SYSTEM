@@ -1,9 +1,9 @@
-import { Award, Calendar, ClipboardCheck } from "lucide-react";
+import { Calendar, ClipboardCheck, MessageSquare } from "lucide-react";
 import { LoadingCard } from "@/components/ui/loading";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Assessment } from "../types";
-import { getScoreBadge, getStatusBadge, getStudentName, getStudentMatric, calcAverageScore } from "../utils/assessment-ui";
+import { getStatusBadge, getStudentName, getStudentMatric } from "../utils/assessment-ui";
 
 interface AssessmentsListProps {
   assessments: Assessment[];
@@ -33,13 +33,13 @@ export function AssessmentsList({
             <div>
               <h3 className="text-lg font-semibold">
                 {searchQuery || statusFilter !== "all"
-                  ? "No Assessments Found"
-                  : "No Assessments Yet"}
+                  ? "No Feedback Found"
+                  : "No Feedback Yet"}
               </h3>
               <p className="mt-1 text-muted-foreground">
                 {searchQuery || statusFilter !== "all"
                   ? "Try adjusting your search or filter criteria"
-                  : "Submit your first assessment to rate a student's performance"}
+                  : "Submit feedback on a student's industrial performance"}
               </p>
             </div>
           </div>
@@ -51,14 +51,13 @@ export function AssessmentsList({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Assessments ({assessments.length})</CardTitle>
+        <CardTitle>Feedback ({assessments.length})</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
           {assessments.map((assessment) => {
             const statusConfig = getStatusBadge(assessment.status);
-            const avgScore = calcAverageScore(assessment);
-            const scoreConfig = avgScore != null ? getScoreBadge(avgScore) : null;
+            const hasFeedback = assessment.strengths || assessment.areasForImprovement || assessment.comment;
 
             return (
               <div
@@ -83,22 +82,17 @@ export function AssessmentsList({
                           ? new Date(assessment.createdAt).toLocaleDateString()
                           : "N/A"}
                       </span>
-                      {avgScore != null ? (
+                      {hasFeedback && (
                         <span className="flex items-center gap-1">
-                          <Award className="h-3 w-3" />
-                          Score: {avgScore}%
+                          <MessageSquare className="h-3 w-3" />
+                          Feedback provided
                         </span>
-                      ) : null}
+                      )}
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  {scoreConfig ? (
-                    <Badge variant={scoreConfig.variant} className="min-w-[80px] justify-center">
-                      {scoreConfig.label}
-                    </Badge>
-                  ) : null}
                   <Badge variant={statusConfig.variant}>{statusConfig.text}</Badge>
                 </div>
               </div>

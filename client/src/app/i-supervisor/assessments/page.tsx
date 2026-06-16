@@ -18,23 +18,18 @@ export default function AssessmentsPage() {
     filteredAssessments,
     completedCount,
     pendingCount,
-    averageScore,
     isLoading,
     isCreateDialogOpen,
     setIsCreateDialogOpen,
     students,
     selectedStudent,
     setSelectedStudent,
-    scores,
-    setScores,
     strengths,
     setStrengths,
     areasForImprovement,
     setAreasForImprovement,
     comment,
     setComment,
-    recommendation,
-    setRecommendation,
     handleCreateAssessment,
     isSubmitting,
   } = useIndustrySupervisorAssessments();
@@ -54,7 +49,6 @@ export default function AssessmentsPage() {
         total={assessments.length}
         completed={completedCount}
         drafts={pendingCount}
-        averageScore={averageScore}
       />
 
       <AssessmentsList
@@ -72,16 +66,12 @@ export default function AssessmentsPage() {
         students={students}
         selectedStudent={selectedStudent}
         onStudentChange={setSelectedStudent}
-        scores={scores}
-        onScoresChange={setScores}
         strengths={strengths}
         onStrengthsChange={setStrengths}
         areasForImprovement={areasForImprovement}
         onAreasForImprovementChange={setAreasForImprovement}
         comment={comment}
         onCommentChange={setComment}
-        recommendation={recommendation}
-        onRecommendationChange={setRecommendation}
         onSubmit={handleCreateAssessment}
         isSubmitting={isSubmitting}
       />

@@ -7,12 +7,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { AssessmentScore, StudentOption } from "../types";
+import type { StudentOption } from "../types";
 
 interface IAssessmentCreateDialogProps {
   open: boolean;
@@ -20,16 +19,12 @@ interface IAssessmentCreateDialogProps {
   students: StudentOption[];
   selectedStudent: string;
   onStudentChange: (value: string) => void;
-  scores: AssessmentScore;
-  onScoresChange: (scores: AssessmentScore) => void;
   strengths: string;
   onStrengthsChange: (value: string) => void;
   areasForImprovement: string;
   onAreasForImprovementChange: (value: string) => void;
   comment: string;
   onCommentChange: (value: string) => void;
-  recommendation: string;
-  onRecommendationChange: (value: "excellent" | "very_good" | "good" | "fair" | "poor") => void;
   onSubmit: () => void;
   isSubmitting: boolean;
 }
@@ -40,30 +35,23 @@ export function IAssessmentCreateDialog({
   students,
   selectedStudent,
   onStudentChange,
-  scores,
-  onScoresChange,
   strengths,
   onStrengthsChange,
   areasForImprovement,
   onAreasForImprovementChange,
   comment,
   onCommentChange,
-  recommendation,
-  onRecommendationChange,
   onSubmit,
   isSubmitting,
 }: IAssessmentCreateDialogProps) {
-  const updateScore = (field: keyof AssessmentScore, value: string) => {
-    onScoresChange({ ...scores, [field]: parseInt(value) || 0 });
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[calc(100vw-1rem)] max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>New Assessment</DialogTitle>
+          <DialogTitle>Submit Student Feedback</DialogTitle>
           <DialogDescription>
-            Rate the student&apos;s performance during their industrial training
+            Provide your feedback on the student&apos;s performance during their industrial training.
+            This will be reviewed by the academic supervisor.
           </DialogDescription>
         </DialogHeader>
 
@@ -84,61 +72,19 @@ export function IAssessmentCreateDialog({
             </Select>
           </div>
 
-          <div className="space-y-3">
-            <p className="text-sm font-medium">Performance Scores (0-100)</p>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
-                <Label className="text-xs">Technical Skills</Label>
-                <Input type="number" min={0} max={100} value={scores.technical} onChange={(e) => updateScore("technical", e.target.value)} />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Communication</Label>
-                <Input type="number" min={0} max={100} value={scores.communication} onChange={(e) => updateScore("communication", e.target.value)} />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Punctuality</Label>
-                <Input type="number" min={0} max={100} value={scores.punctuality} onChange={(e) => updateScore("punctuality", e.target.value)} />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Initiative</Label>
-                <Input type="number" min={0} max={100} value={scores.initiative} onChange={(e) => updateScore("initiative", e.target.value)} />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">Teamwork</Label>
-                <Input type="number" min={0} max={100} value={scores.teamwork} onChange={(e) => updateScore("teamwork", e.target.value)} />
-              </div>
-            </div>
-          </div>
-
           <div className="space-y-2">
             <Label htmlFor="i-strengths">Strengths</Label>
-            <Textarea id="i-strengths" placeholder="Student's key strengths..." value={strengths} onChange={(e) => onStrengthsChange(e.target.value)} rows={2} />
+            <Textarea id="i-strengths" placeholder="Student's key strengths..." value={strengths} onChange={(e) => onStrengthsChange(e.target.value)} rows={3} />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="i-areas">Areas for Improvement</Label>
-            <Textarea id="i-areas" placeholder="Areas the student can improve..." value={areasForImprovement} onChange={(e) => onAreasForImprovementChange(e.target.value)} rows={2} />
+            <Textarea id="i-areas" placeholder="Areas the student can improve..." value={areasForImprovement} onChange={(e) => onAreasForImprovementChange(e.target.value)} rows={3} />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="i-comment">Comment</Label>
-            <Textarea id="i-comment" placeholder="Additional comments..." value={comment} onChange={(e) => onCommentChange(e.target.value)} rows={2} />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="i-recommendation">Recommendation</Label>
-            <Select value={recommendation} onValueChange={onRecommendationChange}>
-              <SelectTrigger id="i-recommendation">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="excellent">Excellent</SelectItem>
-                <SelectItem value="very_good">Very Good</SelectItem>
-                <SelectItem value="good">Good</SelectItem>
-                <SelectItem value="fair">Fair</SelectItem>
-                <SelectItem value="poor">Poor</SelectItem>
-              </SelectContent>
-            </Select>
+            <Label htmlFor="i-comment">Additional Comments</Label>
+            <Textarea id="i-comment" placeholder="Any other comments about the student's performance..." value={comment} onChange={(e) => onCommentChange(e.target.value)} rows={3} />
           </div>
 
           <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
@@ -146,7 +92,7 @@ export function IAssessmentCreateDialog({
               Cancel
             </Button>
             <Button onClick={onSubmit} disabled={isSubmitting || !selectedStudent} className="w-full sm:w-auto">
-              {isSubmitting ? "Submitting..." : "Submit Assessment"}
+              {isSubmitting ? "Submitting..." : "Submit Feedback"}
             </Button>
           </div>
         </div>

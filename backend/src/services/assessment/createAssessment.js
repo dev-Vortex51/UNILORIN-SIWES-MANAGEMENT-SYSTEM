@@ -13,7 +13,7 @@ const prisma = getPrismaClient();
 
 const createAssessment = async (assessmentData, supervisorId) => {
   try {
-    const { student: studentId, type, visitId } = assessmentData;
+    const { student: studentId, type, visitId, scores = {} } = assessmentData;
 
     const student = await prisma.student.findUnique({
       where: { id: studentId },
@@ -83,14 +83,14 @@ const createAssessment = async (assessmentData, supervisorId) => {
         supervisorId,
         type,
         visitId,
-        technical: assessmentData.technical || 0,
-        communication: assessmentData.communication || 0,
-        punctuality: assessmentData.punctuality || 0,
-        initiative: assessmentData.initiative || 0,
-        teamwork: assessmentData.teamwork || 0,
-        professionalism: assessmentData.professionalism,
-        problemSolving: assessmentData.problemSolving,
-        adaptability: assessmentData.adaptability,
+        technical: scores?.technical ?? assessmentData.technical ?? 0,
+        communication: scores?.communication ?? assessmentData.communication ?? 0,
+        punctuality: scores?.punctuality ?? assessmentData.punctuality ?? 0,
+        initiative: scores?.initiative ?? assessmentData.initiative ?? 0,
+        teamwork: scores?.teamwork ?? assessmentData.teamwork ?? 0,
+        professionalism: scores?.professionalism ?? assessmentData.professionalism,
+        problemSolving: scores?.problemSolving ?? assessmentData.problemSolving,
+        adaptability: scores?.adaptability ?? assessmentData.adaptability,
         strengths: assessmentData.strengths,
         areasForImprovement: assessmentData.areasForImprovement,
         comment: assessmentData.comment,
