@@ -1,6 +1,0 @@
-{
-  "rootDirectory": "client",
-  "buildCommand": "npm run build",
-  "installCommand": "npm install",
-  "outputDirectory": ".next"
-}
