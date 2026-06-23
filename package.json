@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@mermaid-js/mermaid-cli": "^11.15.0",
     "date-fns-tz": "^3.2.0",
     "geolib": "^3.3.4"
   }
