@@ -1,0 +1,16 @@
+flowchart TD
+    AS([Academic Supervisor Login]) --> AS_DASH[Dashboard]
+    AS_DASH --> AS_STUDENTS[My Students]
+    AS_DASH --> AS_LOGBOOKS[Review Logbooks]
+    AS_DASH --> AS_VISITS[Schedule Visits]
+    AS_DASH --> AS_ATTENDANCE[Approve Attendance]
+
+    AS_LOGBOOKS --> AS_LOG_ACTION{Decision}
+    AS_LOG_ACTION -->|Approve| AS_LOG_OK[Week Approved]
+    AS_LOG_ACTION -->|Reject| AS_LOG_REJ[Send Back to Student]
+
+    AS_VISITS --> AS_VISIT_SCHEDULE[Schedule Visit<br/>Physical / Virtual]
+    AS_VISIT_SCHEDULE --> AS_VISIT_CONDUCT[Conduct Visit]
+    AS_VISIT_CONDUCT --> AS_VISIT_REPORT[Record Feedback & Score]
+
+    AS_STUDENTS --> AS_ASSESS[Create Assessment<br/>Score + Grade]

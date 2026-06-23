@@ -4,6 +4,7 @@ const config = require("../config");
 const { HTTP_STATUS, ERROR_MESSAGES } = require("../utils/constants");
 const { formatResponse } = require("../utils/helpers");
 const logger = require("../utils/logger");
+const { getAuditContext } = require("../utils/asyncStorage");
 
 const prisma = getPrismaClient();
 
@@ -90,6 +91,15 @@ const authenticate = async (req, res, next) => {
 
     // Attach user to request object
     req.user = user;
+
+    // Update audit context with authenticated user
+    const auditCtx = getAuditContext();
+    if (auditCtx) {
+      auditCtx.userId = user.id;
+      auditCtx.userEmail = user.email;
+      auditCtx.userRole = user.role;
+    }
+
     next();
   } catch (error) {
     logger.error(`Authentication error: ${error.message}`);

@@ -1,0 +1,20 @@
+{
+  "theme": "neutral",
+  "themeVariables": {
+    "textColor": "#000000",
+    "nodeTextColor": "#000000",
+    "titleColor": "#000000",
+    "lineColor": "#000000",
+    "fontFamily": "Arial, sans-serif",
+    "fontSize": "14px"
+  },
+  "flowchart": {
+    "htmlLabels": false,
+    "useMaxWidth": false
+  },
+  "er": {
+    "layoutDirection": "TB",
+    "useMaxWidth": false,
+    "htmlLabels": false
+  }
+}

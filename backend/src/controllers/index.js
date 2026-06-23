@@ -13,6 +13,7 @@ const supervisorController = require("./supervisorController");
 const reportController = require("./reportController");
 const notificationController = require("./notificationController");
 const attendanceController = require("./attendanceController");
+const auditController = require("./auditController");
 
 module.exports = {
   authController,
@@ -30,4 +31,5 @@ module.exports = {
   reportController,
   notificationController,
   attendanceController,
+  auditController,
 };

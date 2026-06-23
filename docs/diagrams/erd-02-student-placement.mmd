@@ -1,0 +1,50 @@
+erDiagram
+    Department ||--o{ Student : has
+    User ||--o| Student : has_profile
+    Student ||--o{ Placement : submits
+    Student ||--o{ SupervisorAssignment : assigned_to
+    IndustryPartner ||--o{ Placement : hosts
+    Placement ||--o{ SupervisorAssignment : associates
+
+    Student {
+        string id PK
+        string userId FK
+        string matricNumber
+        string departmentId FK
+        int level
+        string session
+        float cgpa
+        bool hasPlacement
+        bool placementApproved
+    }
+
+    Placement {
+        string id PK
+        string studentId FK
+        string companyName
+        string companyAddress
+        string companyEmail
+        string companyPhone
+        string position
+        date startDate
+        date endDate
+        string status
+        string industryPartnerId FK
+        string industrialSupervisorId FK
+    }
+
+    IndustryPartner {
+        string id PK
+        string name
+        string email
+        string phone
+        string sector
+    }
+
+    SupervisorAssignment {
+        string id PK
+        string studentId FK
+        string supervisorId FK
+        string placementId FK
+        string status
+    }

@@ -1,0 +1,14 @@
+flowchart TD
+    START([User arrives]) --> LOGIN{Has an account?}
+    LOGIN -->|No - Invited| INVITE_VERIFY[Verify Invite]
+    INVITE_VERIFY --> INVITE_SETUP[Setup Account]
+    INVITE_SETUP --> LOGIN_PAGE[Login Page]
+    LOGIN -->|No - Not Invited| FORGOT_PWD[Forgot Password]
+    FORGOT_PWD --> LOGIN_PAGE
+    LOGIN -->|Yes| LOGIN_PAGE
+    LOGIN_PAGE --> AUTH{Valid credentials?}
+    AUTH -->|No| LOGIN_PAGE
+    AUTH -->|Yes| CHECK_PWD{Password reset<br/>required?}
+    CHECK_PWD -->|Yes| RESET_PWD[Reset Password]
+    RESET_PWD --> LOGIN_PAGE
+    CHECK_PWD -->|No| ROLE_GATE[[Redirect by Role]]

@@ -12,6 +12,7 @@ import {
   Settings,
   Users,
   Mail,
+  ScrollText,
 } from "lucide-react";
 
 const navItems = [
@@ -26,6 +27,7 @@ const navItems = [
     icon: Users,
   },
   { title: "Reports", href: "/admin/reports", icon: FileBarChart },
+  { title: "Audit Logs", href: "/admin/audit-logs", icon: ScrollText },
   { title: "Settings", href: "/admin/settings", icon: Settings },
 ];
 

@@ -1,0 +1,25 @@
+erDiagram
+    User ||--o{ Notification : receives
+    User ||--o{ Invitation : sends
+    Notification ||--|{ User : created_by
+
+    Notification {
+        string id PK
+        string recipientId FK
+        string type
+        string title
+        string message
+        string priority
+        bool isRead
+    }
+
+    Invitation {
+        string id PK
+        string email
+        string role
+        string token
+        datetime expiresAt
+        string status
+        string invitedById FK
+        string departmentId FK
+    }

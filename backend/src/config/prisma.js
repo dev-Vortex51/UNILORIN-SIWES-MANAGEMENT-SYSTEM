@@ -3,8 +3,59 @@
 const { PrismaClient } = require("@prisma/client");
 const logger = require("../utils/logger");
 const { handlePrismaError } = require("../utils/prismaErrors");
+const { getAuditContext } = require("../utils/asyncStorage");
+
+const AUDIT_ACTIONS = {
+  create: "CREATE",
+  createMany: "CREATE",
+  update: "UPDATE",
+  updateMany: "UPDATE",
+  delete: "DELETE",
+  deleteMany: "DELETE",
+};
+
+const SKIP_MODELS = ["AuditLog"];
 
 let prismaInstance = null;
+
+
+const createAuditMiddleware = () => {
+  return async (params, next) => {
+    const result = await next(params);
+
+    const action = AUDIT_ACTIONS[params.action];
+    if (!action || SKIP_MODELS.includes(params.model)) {
+      return result;
+    }
+
+    const context = getAuditContext();
+
+    setImmediate(async () => {
+      try {
+        const prisma = getPrismaClient();
+        await prisma.auditLog.create({
+          data: {
+            action,
+            entity: params.model,
+            entityId: result?.id || params.args?.where?.id || null,
+            userId: context.userId || null,
+            userEmail: context.userEmail || null,
+            userRole: context.userRole || null,
+            metadata: {
+              args: params.args,
+            },
+            ipAddress: context.ipAddress || null,
+            userAgent: context.userAgent || null,
+          },
+        });
+      } catch (err) {
+        logger.error(`Audit log failed: ${err.message}`);
+      }
+    });
+
+    return result;
+  };
+};
 
 
 const getPrismaClient = () => {
@@ -27,6 +78,9 @@ const getPrismaClient = () => {
   prismaInstance.$on("error", (e) => {
     logger.error(`Prisma Client error: ${e.message}`);
   });
+
+  // Attach audit middleware
+  prismaInstance.$use(createAuditMiddleware());
 
   return prismaInstance;
 };

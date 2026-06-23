@@ -1,0 +1,50 @@
+flowchart TD
+    ADMIN([Admin])
+    COORD([Coordinator])
+    STUDENT([Student])
+    ACAD_SUP([Academic /<br/>Dept. Supervisor])
+    IND_SUP([Industrial<br/>Supervisor])
+
+    %% Admin interactions
+    ADMIN -->|Creates / Manages| FAC_DEPT[Faculties &<br/>Departments]
+    ADMIN -->|Invites| COORD
+    ADMIN -->|Invites / Manages| ACAD_SUP
+    ADMIN -->|Configures| SETTINGS[System Settings<br/>& Scoring Rules]
+    ADMIN -->|Views| REPORTS[System Reports<br/>& Analytics]
+
+    %% Coordinator interactions
+    COORD -->|Invites / Manages| STUDENT
+    COORD -->|Invites / Manages| ACAD_SUP
+    COORD -->|Assigns| IND_SUP
+    COORD -->|Approves| STD_PLACEMENT[Student Placement]
+    COORD -->|Approves| COMPLIANCE[Compliance Forms]
+    COORD -->|Approves| TECH_REPORT[Final Tech Reports]
+    COORD -->|Oversees| VISITS[Supervisor Visits]
+    COORD -->|Views| DEPT_REPORTS[Department Analytics]
+
+    %% Student interactions
+    STUDENT -->|Submits| STD_PLACEMENT
+    STUDENT -->|Submits| LOGBOOK[Weekly Logbooks]
+    STUDENT -->|Records| ATTENDANCE[Daily Attendance<br/>Check-in/out]
+    STUDENT -->|Uploads| COMPLIANCE
+    STUDENT -->|Submits| TECH_REPORT
+
+    %% Academic Supervisor interactions
+    ACAD_SUP -->|Reviews / Approves| LOGBOOK
+    ACAD_SUP -->|Schedules / Conducts| VISITS
+    ACAD_SUP -->|Assesses| STUDENT
+    ACAD_SUP -->|Approves| ATTENDANCE
+
+    %% Industrial Supervisor interactions
+    IND_SUP -->|Reviews / Scores| LOGBOOK
+    IND_SUP -->|Assesses| STUDENT
+    IND_SUP -->|Approves| ATTENDANCE
+
+    %% Cross-cutting
+    NOTIF([Notification Engine]) -.- ADMIN
+    NOTIF -.- COORD
+    NOTIF -.- STUDENT
+    NOTIF -.- ACAD_SUP
+    NOTIF -.- IND_SUP
+
+    classDef default fill:none,stroke:#000,stroke-width:1px,font-weight:bold

@@ -1,0 +1,28 @@
+{
+  "version": "5.2",
+  "steps": [
+    {
+      "tag": "CreateEnum",
+      "enum": "AuditAction",
+      "values": ["CREATE", "UPDATE", "DELETE", "LOGIN", "LOGOUT", "EXPORT", "APPROVE", "REJECT", "ASSIGN", "REVOKE"]
+    },
+    {
+      "tag": "CreateTable",
+      "table": "audit_logs",
+      "columns": [
+        { "name": "id", "type": "Text", "default": { "name": "uuid" }, "isGenerated": true },
+        { "name": "action", "type": "AuditAction", "isRequired": true },
+        { "name": "entity", "type": "Text", "isRequired": true },
+        { "name": "entityId", "type": "Text" },
+        { "name": "userId", "type": "Text" },
+        { "name": "userEmail", "type": "Text" },
+        { "name": "userRole", "type": "Text" },
+        { "name": "metadata", "type": "Json" },
+        { "name": "ipAddress", "type": "Text" },
+        { "name": "userAgent", "type": "Text" },
+        { "name": "createdAt", "type": "DateTime", "default": { "name": "now" } }
+      ],
+      "primaryKey": { "columns": ["id"] }
+    }
+  ]
+}

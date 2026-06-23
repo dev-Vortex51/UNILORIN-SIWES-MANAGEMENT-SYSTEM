@@ -1,0 +1,14 @@
+flowchart LR
+    TRIGGER{System Events} --> NOTIF[Notification Engine]
+    NOTIF --> IN_APP[In-App Notification]
+    NOTIF --> EMAIL[Email Notification]
+    NOTIF --> PUSH[Push Alert]
+
+    NOTIF --> PREF{User Preferences}
+    PREF -->|Opted In| DELIVER[Delivered]
+    PREF -->|Opted Out| SUPPRESS[Suppressed]
+
+    USER[Any User] --> SETTINGS[Profile Settings]
+    SETTINGS --> SEC[Security / Password]
+    SETTINGS --> PROF[Profile Info]
+    SETTINGS --> NOTIF_PREF[Notification Preferences]

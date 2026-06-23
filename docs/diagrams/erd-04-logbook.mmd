@@ -1,0 +1,37 @@
+erDiagram
+    Student ||--o{ Logbook : writes
+    Logbook ||--o{ LogbookEvidence : has
+    Logbook ||--o{ LogbookReview : reviewed_by
+    Supervisor ||--o{ LogbookReview : reviews
+
+    Logbook {
+        string id PK
+        string studentId FK
+        int weekNumber
+        date startDate
+        date endDate
+        string tasksPerformed
+        string skillsAcquired
+        string challenges
+        string status
+        string departmentalReviewStatus
+        string industrialReviewStatus
+    }
+
+    LogbookEvidence {
+        string id PK
+        string logbookId FK
+        string name
+        string path
+        string type
+    }
+
+    LogbookReview {
+        string id PK
+        string logbookId FK
+        string supervisorId FK
+        string supervisorType
+        string comment
+        float rating
+        string status
+    }

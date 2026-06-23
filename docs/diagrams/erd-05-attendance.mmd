@@ -1,0 +1,19 @@
+erDiagram
+    Student ||--o{ Attendance : records
+    Placement ||--o{ Attendance : tracks
+    Supervisor ||--o{ Attendance : approves
+
+    Attendance {
+        string id PK
+        string studentId FK
+        string placementId FK
+        date date
+        datetime checkInTime
+        datetime checkOutTime
+        float hoursWorked
+        string punctuality
+        string dayStatus
+        string approvalStatus
+        string absenceReason
+        string supervisorId FK
+    }

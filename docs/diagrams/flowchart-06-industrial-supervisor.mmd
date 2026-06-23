@@ -1,0 +1,13 @@
+flowchart TD
+    IS([Industrial Supervisor Login]) --> IS_DASH[Dashboard]
+    IS_DASH --> IS_STUDENTS[My Students]
+    IS_DASH --> IS_LOGBOOKS[Review Logbooks]
+    IS_DASH --> IS_ATTENDANCE[Approve Attendance]
+    IS_DASH --> IS_ASSESSMENTS[Create Assessments]
+
+    IS_LOGBOOKS --> IS_LOG_ACTION{Decision}
+    IS_LOG_ACTION -->|Approve| IS_LOG_OK[Forward to Academic Sup.]
+    IS_LOG_ACTION -->|Reject| IS_LOG_REJ[Send Back to Student]
+
+    IS_ATTENDANCE --> IS_ATT_OK[Approve/Reject Attendance]
+    IS_ASSESSMENTS --> IS_ASSESS_DONE[Assessment Recorded]

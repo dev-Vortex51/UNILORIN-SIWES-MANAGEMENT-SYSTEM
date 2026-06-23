@@ -1,0 +1,29 @@
+erDiagram
+    Student ||--o{ ComplianceForm : uploads
+    Student ||--o{ TechnicalReport : submits
+    Placement ||--o{ ComplianceForm : requires
+    Placement ||--o{ TechnicalReport : generates
+    User ||--o{ ComplianceForm : reviews
+    User ||--o{ TechnicalReport : reviews
+
+    ComplianceForm {
+        string id PK
+        string studentId FK
+        string placementId FK
+        string formType
+        string title
+        string status
+        string documentName
+        string reviewedById FK
+    }
+
+    TechnicalReport {
+        string id PK
+        string studentId FK
+        string placementId FK
+        string title
+        string abstract
+        string status
+        string documentName
+        string reviewedById FK
+    }

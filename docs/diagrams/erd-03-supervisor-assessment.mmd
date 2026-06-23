@@ -1,0 +1,50 @@
+erDiagram
+    User ||--o| Supervisor : has_profile
+    Department ||--o{ Supervisor : has
+    IndustryPartner ||--o{ Supervisor : employs
+    Supervisor ||--o{ Assessment : conducts
+    Supervisor ||--o{ Visit : performs
+    Supervisor ||--o{ Placement : supervises
+    Visit ||--o{ Assessment : triggers
+    Student ||--o{ Assessment : receives
+    Student ||--o{ Visit : receives
+
+    Supervisor {
+        string id PK
+        string userId FK
+        string type
+        string departmentId FK
+        string companyName
+        string industryPartnerId FK
+        int maxStudents
+        bool isAvailable
+    }
+
+    Assessment {
+        string id PK
+        string studentId FK
+        string supervisorId FK
+        string placementId FK
+        string visitId FK
+        string type
+        int technical
+        int communication
+        int punctuality
+        int initiative
+        int teamwork
+        string recommendation
+        string grade
+        string status
+    }
+
+    Visit {
+        string id PK
+        string studentId FK
+        string supervisorId FK
+        string placementId FK
+        datetime visitDate
+        string type
+        string status
+        string feedback
+        int score
+    }

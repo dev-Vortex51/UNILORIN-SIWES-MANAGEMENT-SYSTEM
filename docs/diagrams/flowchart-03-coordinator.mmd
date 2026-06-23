@@ -1,0 +1,17 @@
+flowchart TD
+    COORD([Coordinator Login]) --> COORD_DASH[Coordinator Dashboard]
+    COORD_DASH --> COORD_STUDENTS[Manage Students]
+    COORD_DASH --> COORD_PLACEMENTS[Review Placements]
+    COORD_DASH --> COORD_SUPERVISORS[Supervisor Directory]
+    COORD_DASH --> COORD_INVITE[Invite Users]
+    COORD_DASH --> COORD_VISITS[Oversee Visits]
+    COORD_DASH --> COORD_COMPLIANCE[Approve Compliance]
+    COORD_DASH --> COORD_REPORTS[Final Reports]
+    COORD_DASH --> COORD_ANALYTICS[Analytics & Export]
+    COORD_STUDENTS --> COORD_STUDENT_DETAIL[Student Profile]
+    COORD_STUDENT_DETAIL --> COORD_PLACE_ACTION{Two actions}
+    COORD_PLACE_ACTION --> COORD_APPROVE[Approve/Reject Placement]
+    COORD_PLACE_ACTION --> COORD_ASSIGN_SUPER[Assign Supervisors]
+    COORD_PLACEMENTS --> COORD_PLACEMENT_LIST{Status?}
+    COORD_PLACEMENT_LIST -->|Pending| COORD_PLACEMENT_REVIEW[Review & Approve/Reject]
+    COORD_PLACEMENT_LIST -->|Approved| COORD_PLACEMENT_ASSIGN[Assign Industrial Supervisor]

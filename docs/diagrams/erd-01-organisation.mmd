@@ -1,0 +1,46 @@
+erDiagram
+    Faculty ||--o{ Department : has
+    Faculty ||--o{ User : has
+    Department }o--|| Faculty : belongs_to
+    Department ||--o{ User : has
+    Department }o--o{ User : coordinated_by
+    User ||--o| NotificationPreference : has
+
+    Faculty {
+        string id PK
+        string name
+        string code
+        bool isActive
+    }
+
+    Department {
+        string id PK
+        string name
+        string code
+        string facultyId FK
+        bool isActive
+    }
+
+    User {
+        string id PK
+        string email
+        string firstName
+        string lastName
+        string role
+        string departmentId FK
+        string facultyId FK
+        bool isActive
+    }
+
+    NotificationPreference {
+        string id PK
+        string userId FK
+        bool emailNotifications
+    }
+
+    SystemSettings {
+        string id PK
+        string currentSession
+        int logbookWeight
+        int assessmentWeight
+    }

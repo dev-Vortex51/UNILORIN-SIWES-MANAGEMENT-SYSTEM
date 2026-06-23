@@ -1,0 +1,12 @@
+flowchart TD
+    ADMIN([Admin Login]) --> ADM_DASH[Admin Dashboard]
+    ADM_DASH --> ADM_FAC[Manage Faculties]
+    ADM_DASH --> ADM_DEPT[Manage Departments]
+    ADM_DASH --> ADM_COORD[Manage Coordinators]
+    ADM_DASH --> ADM_SUPER[Manage Academic Supervisors]
+    ADM_DASH --> ADM_INVITE[Send Invitations]
+    ADM_DASH --> ADM_REPORTS[System Reports]
+    ADM_DASH --> ADM_SETTINGS[System Settings]
+    ADM_FAC --> ADM_FAC_DETAIL[Faculty Detail → Depts]
+    ADM_DEPT --> ADM_DEPT_DETAIL[Department Detail → Coordinators]
+    ADM_SUPER --> ADM_SUPER_DETAIL[Supervisor Detail → Students]

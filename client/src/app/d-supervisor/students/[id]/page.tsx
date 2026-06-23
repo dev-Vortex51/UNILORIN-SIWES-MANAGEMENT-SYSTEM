@@ -14,13 +14,15 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/components/providers/auth-provider";
 import {
-  AssessmentWithFeedbackCard,
   LogbookOverviewCard,
   PlacementDetailsCard,
   RecentLogbookEntriesCard,
   StudentInformationCard,
-  AssessmentDetailsDialog,
 } from "./components/StudentOverviewSections";
+import {
+  AssessmentWithFeedbackCard,
+  AssessmentDetailsDialog,
+} from "./components/AssessmentComponents";
 
 export default function StudentDetailsPage({
   params,

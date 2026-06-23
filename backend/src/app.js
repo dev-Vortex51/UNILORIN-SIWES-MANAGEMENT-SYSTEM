@@ -19,11 +19,28 @@ const {
 } = require("./middleware");
 const logger = require("./utils/logger");
 const { httpMetricsMiddleware, metricsHandler } = require("./observability/metrics");
+const { runWithAuditContext } = require("./utils/asyncStorage");
 
 /**
  * Create Express application
  */
 const app = express();
+
+/**
+ * Audit context (must be early to capture request info)
+ */
+app.use((req, res, next) => {
+  runWithAuditContext(
+    {
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+      userId: null,
+      userEmail: null,
+      userRole: null,
+    },
+    () => next(),
+  );
+});
 
 /**
  * Security Middleware

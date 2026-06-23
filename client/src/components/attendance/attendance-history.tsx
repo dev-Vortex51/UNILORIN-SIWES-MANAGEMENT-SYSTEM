@@ -33,14 +33,14 @@ const getApprovalTone = (status: string) => {
 const dayStatusLabel = (status: string) =>
   status.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 
+const statusToDayStatus: Record<string, string> = {
+  on_time: "PRESENT_ON_TIME",
+  late: "PRESENT_LATE",
+};
+
 export function AttendanceHistory() {
   const [period, setPeriod] = useState("current");
   const [statusFilter, setStatusFilter] = useState<"all" | "on_time" | "late">("all");
-
-  const statusToDayStatus: Record<string, string> = {
-    on_time: "PRESENT_ON_TIME",
-    late: "PRESENT_LATE",
-  };
 
   const filters = useMemo<AttendanceFilters>(() => {
     const now = new Date();

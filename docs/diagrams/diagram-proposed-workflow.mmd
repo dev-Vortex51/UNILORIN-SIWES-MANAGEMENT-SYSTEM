@@ -1,0 +1,92 @@
+flowchart TB
+    %% Title
+    PHASE1[PHASE 1: SYSTEM SETUP]:::phase
+    PHASE2[PHASE 2: STUDENT ONBOARDING]:::phase
+    PHASE3[PHASE 3: PLACEMENT]:::phase
+    PHASE4[PHASE 4: TRAINING EXECUTION]:::phase
+    PHASE5[PHASE 5: EVALUATION]:::phase
+    PHASE6[PHASE 6: COMPLETION]:::phase
+
+    %% ===== PHASE 1 =====
+    subgraph Setup[" "]
+        A1[Admin creates<br/>Faculties & Departments]
+        A2[Admin invites<br/>Coordinators]
+        A3[Coordinator invites<br/>Students & Supervisors]
+        A1 --> A2 --> A3
+    end
+
+    %% ===== PHASE 2 =====
+    subgraph Onboarding[" "]
+        B1[Student receives<br/>invitation email]
+        B2[Student sets up<br/>account & password]
+        B3[Student logs in<br/>for first time]
+        B1 --> B2 --> B3
+    end
+
+    %% ===== PHASE 3 =====
+    subgraph Placement[" "]
+        C1[Student submits<br/>placement details]
+        C2[Coordinator<br/>reviews placement]
+        C3{Approved?}
+        C4[Industrial supervisor<br/>assigned]
+        C5[Academic supervisor<br/>assigned]
+        C1 --> C2 --> C3
+        C3 -->|Yes| C4
+        C3 -->|No| C1
+        C4 --> C5
+    end
+
+    %% ===== PHASE 4 =====
+    subgraph Training[" "]
+        D1[Student checks in<br/>daily at office]
+        D2[Student submits<br/>weekly logbooks]
+        D3[Industrial supervisor<br/>reviews logbook]
+        D4{Approved?}
+        D5[Academic supervisor<br/>final approval]
+        D6{Approved?}
+        D7[Student uploads<br/>compliance forms]
+        D8[Coordinator<br/>reviews forms]
+        D9{Approved?}
+
+        D1 <--> D2
+        D2 --> D3 --> D4
+        D4 -->|Yes| D5 --> D6
+        D4 -->|No| D2
+        D6 -->|Yes| D2
+        D6 -->|No| D2
+        D1 --> D7 --> D8 --> D9
+        D9 -->|Yes| D1
+        D9 -->|No| D7
+    end
+
+    %% ===== PHASE 5 =====
+    subgraph Evaluation[" "]
+        E1[Academic supervisor<br/>schedules visit]
+        E2[Visit conducted<br/>physical / virtual]
+        E3[Academic supervisor<br/>assesses student]
+        E4[Industrial supervisor<br/>assesses student]
+        E5[Final grade<br/>calculated]
+        E1 --> E2
+        E2 --> E3
+        E3 --> E5
+        E4 --> E5
+    end
+
+    %% ===== PHASE 6 =====
+    subgraph Completion[" "]
+        F1[Student submits<br/>final technical report]
+        F2[Coordinator<br/>reviews report]
+        F3{Approved?}
+        F4[Student marked<br/>training completed]
+        F5[All records<br/>archived]
+        F1 --> F2 --> F3
+        F3 -->|Yes| F4
+        F3 -->|No| F1
+        F4 --> F5
+    end
+
+    %% Phase connections
+    Setup --> Onboarding --> Placement --> Training --> Evaluation --> Completion
+
+    classDef phase fill:none,stroke:#000,stroke-width:1px,stroke-dasharray:5 5,font-weight:bold
+    classDef default fill:none,stroke:#000,stroke-width:1px,font-weight:bold

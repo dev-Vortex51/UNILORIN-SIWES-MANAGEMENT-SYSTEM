@@ -1,0 +1,29 @@
+flowchart TD
+    STUDENT([Student Login]) --> STD_DASH[Student Dashboard]
+    STD_DASH --> STD_CHECK{Placement<br/>submitted?}
+    STD_CHECK -->|No| STD_PLACEMENT_FORM[Submit Placement<br/>Company + Acceptance Letter]
+    STD_PLACEMENT_FORM --> STD_AWAIT[Await Coordinator Approval]
+    STD_CHECK -->|Yes| STD_APPROVED{Approved?}
+    STD_APPROVED -->|No| STD_PLACEMENT_FORM
+    STD_APPROVED -->|Yes| STD_ACTIVITIES{Activity}
+    STD_ACTIVITIES --> STD_CHECKIN[Attendance<br/>Check-in / Check-out]
+    STD_ACTIVITIES --> STD_LOGBOOK[Weekly Logbook Entry<br/>Tasks + Evidence]
+    STD_ACTIVITIES --> STD_COMPLIANCE[Upload Compliance Forms]
+    STD_ACTIVITIES --> STD_FINAL_REPORT[Upload Final Report]
+    STD_ACTIVITIES --> STD_VISITS[View Scheduled Visits]
+    STD_ACTIVITIES --> STD_SUPERVISORS[View My Supervisors]
+
+    STD_LOGBOOK -->|Submit| STD_LOG_REVIEW{Review}
+    STD_LOG_REVIEW --> STD_LOG_IND[Industrial Sup. Reviews]
+    STD_LOG_IND -->|Approved| STD_LOG_ACAD[Academic Sup. Final Approval]
+    STD_LOG_IND -->|Rejected| STD_LOGBOOK
+    STD_LOG_ACAD -->|Approved| STD_LOG_DONE[Week Locked]
+    STD_LOG_ACAD -->|Rejected| STD_LOGBOOK
+
+    STD_COMPLIANCE -->|Submit| STD_COMP_REVIEW{Coordinator}
+    STD_COMP_REVIEW -->|Approved| STD_COMP_DONE[Form Accepted]
+    STD_COMP_REVIEW -->|Rejected| STD_COMPLIANCE
+
+    STD_FINAL_REPORT -->|Submit| STD_REP_REVIEW{Coordinator}
+    STD_REP_REVIEW -->|Approved| STD_REP_DONE[Report Approved]
+    STD_REP_REVIEW -->|Rejected| STD_FINAL_REPORT

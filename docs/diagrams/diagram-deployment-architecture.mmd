@@ -1,0 +1,45 @@
+flowchart LR
+    subgraph Client["CLIENT LAYER"]
+        BROWSER[Browser / Mobile App]
+        SERVICE_WORKER[PWA Service Worker<br/>Offline Support]
+    end
+
+    subgraph CDN["CONTENT DELIVERY"]
+        CLOUDINARY[Cloudinary<br/>File & Image Uploads]
+    end
+
+    subgraph Host["RENDER.COM HOSTING"]
+        direction TB
+        subgraph FE["Frontend"]
+            NEXT_APP[Next.js App<br/>Port 3000]
+        end
+        subgraph BE["Backend API"]
+            EXPRESS[Express Server<br/>Port 10000]
+            API[API Routes: /api/v1/]
+            SOCKET[Socket.io<br/>Real-time Events]
+            AUTH_MID[JWT Auth Middleware]
+        end
+    end
+
+    subgraph Data["DATA LAYER"]
+        PG[(PostgreSQL<br/>Prisma ORM)]
+        UPLOADS[(Local Uploads<br/>backend/uploads/)]
+    end
+
+    subgraph External["EXTERNAL SERVICES"]
+        BREVO[Brevo / SendGrid<br/>Email Service]
+    end
+
+    BROWSER --> NEXT_APP
+    SERVICE_WORKER --> NEXT_APP
+    NEXT_APP -->|HTTP / REST| EXPRESS
+    NEXT_APP --> CLOUDINARY
+    EXPRESS --> AUTH_MID
+    AUTH_MID --> API
+    API --> PG
+    API --> UPLOADS
+    API --> BREVO
+    SOCKET --> BROWSER
+    SOCKET --> NEXT_APP
+
+    classDef default fill:none,stroke:#000,stroke-width:1px,font-weight:bold
