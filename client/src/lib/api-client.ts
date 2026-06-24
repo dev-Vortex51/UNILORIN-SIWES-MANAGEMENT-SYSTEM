@@ -85,16 +85,19 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
+        const message =
+          error.response?.data?.message ||
+          "Your session has expired. Please log in again.";
+
         window.localStorage.removeItem(ACCESS_TOKEN_KEY);
         window.localStorage.removeItem(REFRESH_TOKEN_KEY);
         document.cookie =
           "accessToken=; Path=/; Max-Age=0; SameSite=Lax";
-      }
-      if (
-        typeof window !== "undefined" &&
-        !window.location.pathname.includes("/login")
-      ) {
-        window.location.href = "/login";
+
+        if (!window.location.pathname.includes("/login")) {
+          (window as any).__sessionExpiredMessage = message;
+          window.location.href = "/login";
+        }
       }
     }
     return Promise.reject(error);

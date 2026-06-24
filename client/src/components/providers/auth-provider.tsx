@@ -89,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     retry: 1,
     staleTime: 5 * 60 * 1000,
+    refetchInterval: 120_000,
     enabled: isMounted && hasAuthToken,
   });
 

@@ -156,6 +156,15 @@ export default function LoginPage() {
     }
   }, [searchParams]);
 
+  // Show session expired message from token invalidation redirect
+  useEffect(() => {
+    const message = (window as any).__sessionExpiredMessage;
+    if (message) {
+      delete (window as any).__sessionExpiredMessage;
+      setError(message);
+    }
+  }, []);
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError("");
