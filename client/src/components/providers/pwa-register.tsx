@@ -8,15 +8,17 @@ export function PwaRegister() {
       return;
     }
 
+    if (process.env.NODE_ENV === "development") {
+      return;
+    }
+
     const register = async () => {
       try {
-        const registration = await navigator.serviceWorker.register("/sw.js", {
+        await navigator.serviceWorker.register("/sw.js", {
           scope: "/",
         });
-
-        registration.update().catch(() => undefined);
       } catch {
-        // Fail silently to avoid blocking app usage in unsupported environments.
+        // Fail silently.
       }
     };
 
