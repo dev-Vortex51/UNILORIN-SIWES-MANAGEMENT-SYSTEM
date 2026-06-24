@@ -72,11 +72,12 @@ const login = async (email, password) => {
       data: { lastLogin: new Date() },
     });
 
-    // Generate tokens
+    // Generate tokens with current tokenVersion
     const accessToken = generateToken({
       id: user.id,
       email: user.email,
       role: user.role,
+      tokenVersion: user.tokenVersion,
     });
     const refreshToken = generateRefreshToken({
       id: user.id,
