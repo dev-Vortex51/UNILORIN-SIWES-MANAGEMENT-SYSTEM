@@ -33,6 +33,7 @@ const login = async (email, password) => {
         isActive: true,
         lastLogin: true,
         departmentId: true,
+        tokenVersion: true,
         department: {
           select: {
             id: true,
@@ -160,13 +161,14 @@ const changePassword = async (userId, oldPassword, newPassword) => {
       );
     }
 
-    // Hash and update password
+    // Hash and update password, invalidate other sessions
     const hashedPassword = await hashPassword(newPassword);
     await prisma.user.update({
       where: { id: userId },
       data: {
         password: hashedPassword,
         passwordResetRequired: false,
+        tokenVersion: { increment: 1 },
       },
     });
 
@@ -199,6 +201,41 @@ const logout = async (userId) => {
   return {
     message: SUCCESS_MESSAGES.LOGOUT_SUCCESS,
   };
+};
+
+const logoutAllDevices = async (userId) => {
+  try {
+    const prisma = getPrismaClient();
+
+    // Increment tokenVersion to invalidate all existing tokens
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { tokenVersion: { increment: 1 } },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        tokenVersion: true,
+      },
+    });
+
+    // Generate a new token with the incremented version for the current session
+    const accessToken = generateToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    logger.info(`User logged out all devices: ${user.email}`);
+
+    return {
+      message: "Logged out of all other devices successfully",
+      accessToken,
+      refreshToken,
+    };
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+    throw handlePrismaError(error);
+  }
 };
 
 const getProfile = async (userId) => {
@@ -445,7 +482,7 @@ const resetPassword = async (token, newPassword) => {
       );
     }
 
-    // Hash and update password
+    // Hash and update password, invalidate other sessions
     const hashedPassword = await hashPassword(newPassword);
 
     await prisma.user.update({
@@ -455,6 +492,7 @@ const resetPassword = async (token, newPassword) => {
         passwordResetToken: null,
         passwordResetExpires: null,
         passwordResetRequired: false,
+        tokenVersion: { increment: 1 },
       },
     });
 
@@ -492,7 +530,7 @@ const resetPasswordFirstLogin = async (userId, newPassword) => {
       throw new ApiError(HTTP_STATUS.NOT_FOUND, "User not found");
     }
 
-    // Hash and update password, clear first login flag
+    // Hash and update password, clear first login flag, invalidate other sessions
     const hashedPassword = await hashPassword(newPassword);
 
     await prisma.user.update({
@@ -500,6 +538,7 @@ const resetPasswordFirstLogin = async (userId, newPassword) => {
       data: {
         password: hashedPassword,
         passwordResetRequired: false,
+        tokenVersion: { increment: 1 },
       },
     });
 
@@ -528,6 +567,7 @@ module.exports = {
   login,
   changePassword,
   logout,
+  logoutAllDevices,
   getProfile,
   updateProfile,
   forgotPassword,

@@ -46,6 +46,7 @@ const authenticate = async (req, res, next) => {
         passwordResetRequired: true,
         departmentId: true,
         department: true,
+        tokenVersion: true,
       },
     });
 
@@ -60,6 +61,13 @@ const authenticate = async (req, res, next) => {
       return res
         .status(HTTP_STATUS.FORBIDDEN)
         .json(formatResponse(false, "Account has been deactivated"));
+    }
+
+    // Check token version (invalidates tokens from older sessions)
+    if (decoded.tokenVersion !== undefined && decoded.tokenVersion !== user.tokenVersion) {
+      return res
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .json(formatResponse(false, "Session expired. Please login again."));
     }
 
     // Get student/supervisor profile if applicable
@@ -163,6 +171,7 @@ const generateToken = (user) => {
     id: user.id,
     email: user.email,
     role: user.role,
+    tokenVersion: user.tokenVersion ?? 0,
   };
 
   return jwt.sign(payload, config.jwt.secret, {
@@ -210,6 +219,15 @@ const refreshAccessToken = async (req, res, next) => {
     // Find user (using Prisma)
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        isActive: true,
+        tokenVersion: true,
+      },
     });
 
     if (!user || !user.isActive) {
@@ -218,7 +236,7 @@ const refreshAccessToken = async (req, res, next) => {
         .json(formatResponse(false, "User not found or inactive"));
     }
 
-    // Generate new access token
+    // Generate new access token with current tokenVersion
     const accessToken = generateToken(user);
 
     res.status(HTTP_STATUS.OK).json(

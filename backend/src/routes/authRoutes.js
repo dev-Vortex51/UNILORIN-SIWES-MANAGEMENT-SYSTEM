@@ -24,6 +24,8 @@ router.post("/refresh-token", refreshAccessToken);
 
 router.post("/logout", authenticate, authController.logout);
 
+router.post("/logout-all-devices", authenticate, authController.logoutAllDevices);
+
 router.get("/profile", authenticate, authController.getProfile);
 
 router.put(

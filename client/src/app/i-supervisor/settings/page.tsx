@@ -20,6 +20,7 @@ import { CompanyInfoCard } from "./components/CompanyInfoCard";
 import { NotificationPreferencesCard } from "./components/NotificationPreferencesCard";
 import { ProfileInfoCard } from "./components/ProfileInfoCard";
 import { useIndustrySupervisorSettings } from "./hooks/useIndustrySupervisorSettings";
+import { LogoutAllDevicesButton } from "@/components/shared/logout-all-devices-button";
 
 export default function ISupervisorSettingsPage() {
   const { user } = useAuth();
@@ -82,7 +83,7 @@ export default function ISupervisorSettingsPage() {
             <CompanyInfoCard user={user} />
           </TabsContent>
 
-          <TabsContent value="security" className="mt-3">
+          <TabsContent value="security" className="mt-3 space-y-4">
             <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
               <div className="overflow-hidden rounded-md border border-border/60">
                 <div className="grid grid-cols-1 gap-3 border-b border-border/60 p-3 md:grid-cols-[190px_1fr_auto] md:items-center">
@@ -156,6 +157,13 @@ export default function ISupervisorSettingsPage() {
                   <p className="text-sm font-medium text-foreground">Minimum 8 characters, confirmation required.</p>
                 </div>
               </div>
+            </div>
+            <div className="flex items-center justify-between rounded-lg border border-border bg-card p-4 shadow-sm">
+              <div>
+                <p className="text-sm font-medium">Active Sessions</p>
+                <p className="text-sm text-muted-foreground">Log out of all other devices and browsers</p>
+              </div>
+              <LogoutAllDevicesButton />
             </div>
           </TabsContent>
 

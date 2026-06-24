@@ -41,6 +41,14 @@ const logout = asyncHandler(async (req, res) => {
     .json(formatResponse(true, SUCCESS_MESSAGES.LOGOUT_SUCCESS));
 });
 
+const logoutAllDevices = asyncHandler(async (req, res) => {
+  const result = await authService.logoutAllDevices(req.user.id);
+
+  res
+    .status(HTTP_STATUS.OK)
+    .json(formatResponse(true, result.message, result));
+});
+
 const getProfile = asyncHandler(async (req, res) => {
   const profile = await authService.getProfile(req.user.id);
 
@@ -91,6 +99,7 @@ module.exports = {
   resetPasswordFirstLogin,
   changePassword,
   logout,
+  logoutAllDevices,
   getProfile,
   updateProfile,
   getMe,

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LogoutAllDevicesButton } from "@/components/shared/logout-all-devices-button";
 
 interface SecuritySettingsCardProps {
   open: boolean;
@@ -143,6 +144,13 @@ export function SecuritySettingsCard({
             <Label className="text-xs uppercase tracking-wider text-muted-foreground">Password Rules</Label>
             <p className="text-sm font-medium text-foreground">Minimum 8 characters, confirmation required.</p>
           </div>
+        </div>
+        <div className="mt-4 flex items-center justify-between rounded-md border border-border/60 p-3">
+          <div>
+            <p className="text-sm font-medium">Active Sessions</p>
+            <p className="text-sm text-muted-foreground">Log out of all other devices and browsers</p>
+          </div>
+          <LogoutAllDevicesButton />
         </div>
       </CardContent>
     </Card>

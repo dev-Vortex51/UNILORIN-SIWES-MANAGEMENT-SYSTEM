@@ -48,4 +48,12 @@ export const authService = {
       // Ignore logout errors
     }
   },
+
+  logoutAllDevices: async (): Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> => {
+    const response = await apiClient.post("/auth/logout-all-devices");
+    return response.data.data;
+  },
 };

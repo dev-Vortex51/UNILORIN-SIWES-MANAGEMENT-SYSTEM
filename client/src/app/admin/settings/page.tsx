@@ -9,6 +9,7 @@ import { ProfileInfoCard } from "./components/ProfileInfoCard";
 import { ChangePasswordCard } from "./components/ChangePasswordCard";
 import { SystemSettingsCard } from "./components/SystemSettingsCard";
 import { NotificationSettingsCard } from "./components/NotificationSettingsCard";
+import { LogoutAllDevicesButton } from "@/components/shared/logout-all-devices-button";
 import { useAdminSettings } from "./hooks/useAdminSettings";
 
 export default function AdminSettingsPage() {
@@ -75,7 +76,7 @@ export default function AdminSettingsPage() {
             <ProfileInfoCard user={user} />
           </TabsContent>
 
-          <TabsContent value="security" className="mt-3">
+          <TabsContent value="security" className="mt-3 space-y-4">
             <ChangePasswordCard
               passwordData={passwordData}
               onPasswordDataChange={setPasswordData}
@@ -83,6 +84,13 @@ export default function AdminSettingsPage() {
               isChangingPassword={isChangingPassword}
               onSubmit={handlePasswordChange}
             />
+            <div className="flex items-center justify-between rounded-lg border border-border bg-card p-4 shadow-sm">
+              <div>
+                <p className="text-sm font-medium">Active Sessions</p>
+                <p className="text-sm text-muted-foreground">Log out of all other devices and browsers</p>
+              </div>
+              <LogoutAllDevicesButton />
+            </div>
           </TabsContent>
 
           <TabsContent value="preferences" className="mt-3">

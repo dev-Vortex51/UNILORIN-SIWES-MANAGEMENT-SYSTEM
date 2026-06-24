@@ -8,6 +8,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { ProfileCard } from "./components/ProfileCard";
 import { SecurityCard } from "./components/SecurityCard";
 import { SystemPreferencesCard } from "./components/SystemPreferencesCard";
+import { LogoutAllDevicesButton } from "@/components/shared/logout-all-devices-button";
 
 export default function CoordinatorSettingsPage() {
   const { user, isLoading } = useAuth();
@@ -69,8 +70,15 @@ export default function CoordinatorSettingsPage() {
             <ProfileCard />
           </TabsContent>
 
-          <TabsContent value="security" className="mt-3">
+          <TabsContent value="security" className="mt-3 space-y-4">
             <SecurityCard />
+            <div className="flex items-center justify-between rounded-lg border border-border bg-card p-4 shadow-sm">
+              <div>
+                <p className="text-sm font-medium">Active Sessions</p>
+                <p className="text-sm text-muted-foreground">Log out of all other devices and browsers</p>
+              </div>
+              <LogoutAllDevicesButton />
+            </div>
           </TabsContent>
 
           <TabsContent value="preferences" className="mt-3">
