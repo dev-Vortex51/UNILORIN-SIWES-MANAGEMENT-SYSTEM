@@ -24,6 +24,14 @@ export default function AssessmentsPage() {
     students,
     selectedStudent,
     setSelectedStudent,
+    technical,
+    setTechnical,
+    initiative,
+    setInitiative,
+    professionalism,
+    setProfessionalism,
+    communication,
+    setCommunication,
     strengths,
     setStrengths,
     areasForImprovement,
@@ -66,6 +74,14 @@ export default function AssessmentsPage() {
         students={students}
         selectedStudent={selectedStudent}
         onStudentChange={setSelectedStudent}
+        technical={technical}
+        onTechnicalChange={setTechnical}
+        initiative={initiative}
+        onInitiativeChange={setInitiative}
+        professionalism={professionalism}
+        onProfessionalismChange={setProfessionalism}
+        communication={communication}
+        onCommunicationChange={setCommunication}
         strengths={strengths}
         onStrengthsChange={setStrengths}
         areasForImprovement={areasForImprovement}

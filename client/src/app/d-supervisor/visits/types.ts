@@ -8,7 +8,10 @@ export interface Visit {
   objective?: string;
   location?: string;
   feedback?: string;
-  score?: number;
+  understandingScore?: number;
+  relevanceScore?: number;
+  industryFeedback?: number;
+  professionalism?: number;
   completedAt?: string;
   cancelledAt?: string;
   createdAt: string;

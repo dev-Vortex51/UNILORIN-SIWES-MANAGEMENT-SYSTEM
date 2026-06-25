@@ -323,22 +323,10 @@ const visitValidation = {
 
   completeVisit: Joi.object({
     feedback: Joi.string().max(2000).allow("").optional(),
-    score: Joi.number().integer().min(0).max(100).optional(),
-    assessment: Joi.object({
-      type: Joi.string().valid("departmental", "industrial", "final").optional(),
-      technical: Joi.number().min(0).max(100).optional(),
-      communication: Joi.number().min(0).max(100).optional(),
-      punctuality: Joi.number().min(0).max(100).optional(),
-      initiative: Joi.number().min(0).max(100).optional(),
-      teamwork: Joi.number().min(0).max(100).optional(),
-      professionalism: Joi.number().min(0).max(100).optional(),
-      problemSolving: Joi.number().min(0).max(100).optional(),
-      adaptability: Joi.number().min(0).max(100).optional(),
-      strengths: Joi.string().max(1000).allow("").optional(),
-      areasForImprovement: Joi.string().max(1000).allow("").optional(),
-      comment: Joi.string().max(1000).allow("").optional(),
-      recommendation: Joi.string().valid("excellent", "very_good", "good", "fair", "poor").optional(),
-    }).optional(),
+    understandingScore: Joi.number().integer().min(0).max(5).optional(),
+    relevanceScore: Joi.number().integer().min(0).max(5).optional(),
+    industryFeedback: Joi.number().integer().min(0).max(3).optional(),
+    professionalism: Joi.number().integer().min(0).max(2).optional(),
   }),
 
   cancelVisit: Joi.object({
@@ -346,56 +334,7 @@ const visitValidation = {
   }).messages({ "any.required": "Cancellation reason is required" }),
 };
 
-const complianceFormValidation = {
-  createComplianceForm: Joi.object({
-    formType: Joi.string()
-      .valid(
-        "acceptance_letter",
-        "introduction_letter",
-        "monthly_clearance",
-        "indemnity_form",
-        "itf_form_8",
-        "school_form",
-        "final_clearance",
-      )
-      .required(),
-    title: Joi.string().max(200).allow("").optional(),
-    note: Joi.string().max(2000).allow("").optional(),
-  }),
 
-  updateComplianceForm: Joi.object({
-    title: Joi.string().max(200).allow("").optional(),
-    note: Joi.string().max(2000).allow("").optional(),
-  }).min(1),
-
-  submitComplianceForm: Joi.object({}),
-
-  reviewComplianceForm: Joi.object({
-    status: Joi.string().valid("approved", "rejected").required(),
-    reviewComment: Joi.string().max(2000).allow("").optional(),
-  }),
-};
-
-const technicalReportValidation = {
-  createTechnicalReport: Joi.object({
-    title: Joi.string().max(200).allow("").optional(),
-    abstract: Joi.string().max(5000).allow("").optional(),
-    note: Joi.string().max(2000).allow("").optional(),
-  }),
-
-  updateTechnicalReport: Joi.object({
-    title: Joi.string().max(200).allow("").optional(),
-    abstract: Joi.string().max(5000).allow("").optional(),
-    note: Joi.string().max(2000).allow("").optional(),
-  }).min(1),
-
-  submitTechnicalReport: Joi.object({}),
-
-  reviewTechnicalReport: Joi.object({
-    status: Joi.string().valid("approved", "rejected").required(),
-    reviewComment: Joi.string().max(2000).allow("").optional(),
-  }),
-};
 
 /**
  * Notification Validation Schemas
@@ -441,8 +380,6 @@ module.exports = {
   logbookValidation,
   assessmentValidation,
   visitValidation,
-  complianceFormValidation,
-  technicalReportValidation,
   notificationValidation,
   queryValidation,
   customValidators,

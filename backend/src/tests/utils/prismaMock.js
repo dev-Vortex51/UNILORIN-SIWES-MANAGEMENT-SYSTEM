@@ -35,8 +35,6 @@ const createPrismaMock = () => ({
   notification: modelMethods(),
   invitation: modelMethods(),
   visit: modelMethods(),
-  complianceForm: modelMethods(),
-  technicalReport: modelMethods(),
   auditLog: modelMethods(),
   systemSettings: modelMethods(),
   supervisorAssignment: modelMethods(),

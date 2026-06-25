@@ -15,6 +15,10 @@ export function useIndustrySupervisorAssessments() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState("");
+  const [technical, setTechnical] = useState("");
+  const [initiative, setInitiative] = useState("");
+  const [professionalism, setProfessionalism] = useState("");
+  const [communication, setCommunication] = useState("");
   const [strengths, setStrengths] = useState("");
   const [areasForImprovement, setAreasForImprovement] = useState("");
   const [comment, setComment] = useState("");
@@ -41,6 +45,10 @@ export function useIndustrySupervisorAssessments() {
 
   const resetForm = () => {
     setSelectedStudent("");
+    setTechnical("");
+    setInitiative("");
+    setProfessionalism("");
+    setCommunication("");
     setStrengths("");
     setAreasForImprovement("");
     setComment("");
@@ -95,6 +103,10 @@ export function useIndustrySupervisorAssessments() {
     const assessmentData = {
       student: selectedStudent,
       type: "industrial",
+      technical: parseInt(technical) || 0,
+      initiative: parseInt(initiative) || 0,
+      professionalism: parseInt(professionalism) || 0,
+      communication: parseInt(communication) || 0,
       strengths,
       areasForImprovement,
       comment,
@@ -117,6 +129,14 @@ export function useIndustrySupervisorAssessments() {
     students,
     selectedStudent,
     setSelectedStudent,
+    technical,
+    setTechnical,
+    initiative,
+    setInitiative,
+    professionalism,
+    setProfessionalism,
+    communication,
+    setCommunication,
     strengths,
     setStrengths,
     areasForImprovement,

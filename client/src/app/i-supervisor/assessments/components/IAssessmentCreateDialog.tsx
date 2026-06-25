@@ -1,5 +1,6 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,14 @@ interface IAssessmentCreateDialogProps {
   students: StudentOption[];
   selectedStudent: string;
   onStudentChange: (value: string) => void;
+  technical: string;
+  onTechnicalChange: (value: string) => void;
+  initiative: string;
+  onInitiativeChange: (value: string) => void;
+  professionalism: string;
+  onProfessionalismChange: (value: string) => void;
+  communication: string;
+  onCommunicationChange: (value: string) => void;
   strengths: string;
   onStrengthsChange: (value: string) => void;
   areasForImprovement: string;
@@ -35,6 +44,14 @@ export function IAssessmentCreateDialog({
   students,
   selectedStudent,
   onStudentChange,
+  technical,
+  onTechnicalChange,
+  initiative,
+  onInitiativeChange,
+  professionalism,
+  onProfessionalismChange,
+  communication,
+  onCommunicationChange,
   strengths,
   onStrengthsChange,
   areasForImprovement,
@@ -48,10 +65,9 @@ export function IAssessmentCreateDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[calc(100vw-1rem)] max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Submit Student Feedback</DialogTitle>
+          <DialogTitle>Submit Student Assessment</DialogTitle>
           <DialogDescription>
-            Provide your feedback on the student&apos;s performance during their industrial training.
-            This will be reviewed by the academic supervisor.
+            Evaluate the student&apos;s performance during their industrial training.
           </DialogDescription>
         </DialogHeader>
 
@@ -72,6 +88,30 @@ export function IAssessmentCreateDialog({
             </Select>
           </div>
 
+          <div className="rounded-md border p-3 space-y-3">
+            <p className="text-sm font-medium">Assessment Scores</p>
+
+            <div className="space-y-2">
+              <Label htmlFor="i-technical">Technical Competence (0-100)</Label>
+              <Input id="i-technical" type="number" min={0} max={100} placeholder="0-100" value={technical} onChange={(e) => onTechnicalChange(e.target.value)} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="i-initiative">Initiative &amp; Problem Solving (0-100)</Label>
+              <Input id="i-initiative" type="number" min={0} max={100} placeholder="0-100" value={initiative} onChange={(e) => onInitiativeChange(e.target.value)} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="i-professionalism">Professional Conduct (0-100)</Label>
+              <Input id="i-professionalism" type="number" min={0} max={100} placeholder="0-100" value={professionalism} onChange={(e) => onProfessionalismChange(e.target.value)} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="i-communication">Communication &amp; Teamwork (0-100)</Label>
+              <Input id="i-communication" type="number" min={0} max={100} placeholder="0-100" value={communication} onChange={(e) => onCommunicationChange(e.target.value)} />
+            </div>
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="i-strengths">Strengths</Label>
             <Textarea id="i-strengths" placeholder="Student's key strengths..." value={strengths} onChange={(e) => onStrengthsChange(e.target.value)} rows={3} />
@@ -84,7 +124,7 @@ export function IAssessmentCreateDialog({
 
           <div className="space-y-2">
             <Label htmlFor="i-comment">Additional Comments</Label>
-            <Textarea id="i-comment" placeholder="Any other comments about the student's performance..." value={comment} onChange={(e) => onCommentChange(e.target.value)} rows={3} />
+            <Textarea id="i-comment" placeholder="Any other comments..." value={comment} onChange={(e) => onCommentChange(e.target.value)} rows={3} />
           </div>
 
           <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
@@ -92,7 +132,7 @@ export function IAssessmentCreateDialog({
               Cancel
             </Button>
             <Button onClick={onSubmit} disabled={isSubmitting || !selectedStudent} className="w-full sm:w-auto">
-              {isSubmitting ? "Submitting..." : "Submit Feedback"}
+              {isSubmitting ? "Submitting..." : "Submit Assessment"}
             </Button>
           </div>
         </div>

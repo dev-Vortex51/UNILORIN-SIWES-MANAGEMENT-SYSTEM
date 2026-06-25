@@ -39,6 +39,7 @@ export default function AdminInvitationsPage() {
     isCreating,
     isResending,
     isCancelling,
+    isBulkCreating,
   } = useAdminInvitations();
 
   return (

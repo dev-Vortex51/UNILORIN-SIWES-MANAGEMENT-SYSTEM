@@ -70,9 +70,14 @@ export function VisitDetailsDialog({ open, onOpenChange, visit }: VisitDetailsDi
               <p className="rounded-lg bg-muted p-3 text-sm">{visit.feedback || "Not provided"}</p>
             </div>
 
-            <div>
-              <Label className="text-muted-foreground">Score</Label>
-              <p className="font-medium">{typeof visit.score === "number" ? `${visit.score}%` : "N/A"}</p>
+            <div className="rounded-md border p-3 space-y-2">
+              <Label className="text-muted-foreground text-xs font-semibold">Visitation Evaluation</Label>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div><span className="text-muted-foreground">Understanding:</span> <span className="font-medium">{visit.understandingScore ?? "—"}/5</span></div>
+                <div><span className="text-muted-foreground">Relevance:</span> <span className="font-medium">{visit.relevanceScore ?? "—"}/5</span></div>
+                <div><span className="text-muted-foreground">Industry Feedback:</span> <span className="font-medium">{visit.industryFeedback ?? "—"}/3</span></div>
+                <div><span className="text-muted-foreground">Professionalism:</span> <span className="font-medium">{visit.professionalism ?? "—"}/2</span></div>
+              </div>
             </div>
           </div>
         ) : null}

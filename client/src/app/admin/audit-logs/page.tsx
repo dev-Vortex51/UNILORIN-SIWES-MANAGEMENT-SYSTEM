@@ -52,8 +52,6 @@ const ENTITY_OPTIONS = [
   { label: "Faculty", value: "Faculty" },
   { label: "Department", value: "Department" },
   { label: "Invitation", value: "Invitation" },
-  { label: "ComplianceForm", value: "ComplianceForm" },
-  { label: "TechnicalReport", value: "TechnicalReport" },
 ];
 
 export default function AuditLogsPage() {

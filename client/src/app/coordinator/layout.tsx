@@ -12,8 +12,7 @@ import {
   Settings,
   Mail,
   CalendarDays,
-  FileCheck2,
-  GraduationCap,
+  Award,
 } from "lucide-react";
 
 const navItems = [
@@ -23,8 +22,7 @@ const navItems = [
   { title: "Placements", href: "/coordinator/placements", icon: Briefcase },
   { title: "Supervisors", href: "/coordinator/supervisors", icon: UserCheck },
   { title: "Visits", href: "/coordinator/visits", icon: CalendarDays },
-  { title: "Compliance", href: "/coordinator/compliance", icon: FileCheck2 },
-  { title: "Final Reports", href: "/coordinator/final-reports", icon: GraduationCap },
+  { title: "Grades", href: "/coordinator/grades", icon: Award },
   { title: "Reports", href: "/coordinator/reports", icon: FileText },
   { title: "Settings", href: "/coordinator/settings", icon: Settings },
 ];

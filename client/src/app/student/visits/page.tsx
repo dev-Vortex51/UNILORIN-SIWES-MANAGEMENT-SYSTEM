@@ -121,10 +121,13 @@ export default function StudentVisitsPage() {
                       ) : null}
                     </div>
                     <div className="shrink-0 text-right">
-                      {visit.score !== null && visit.score !== undefined ? (
-                        <div>
-                          <p className="text-lg font-bold text-foreground">{visit.score}</p>
-                          <p className="text-[10px] text-muted-foreground">/ 100</p>
+                      {visit.understandingScore !== null && visit.understandingScore !== undefined ? (
+                        <div className="text-right">
+                          <p className="text-xs text-muted-foreground">Visitation Eval</p>
+                          <p className="text-lg font-bold text-foreground">
+                            {(visit.understandingScore || 0) + (visit.relevanceScore || 0) + (visit.industryFeedback || 0) + (visit.professionalism || 0)}
+                          </p>
+                          <p className="text-[10px] text-muted-foreground">/ 15</p>
                         </div>
                       ) : null}
                     </div>

@@ -9,8 +9,6 @@ const departmentRoutes = require("./departmentRoutes");
 const placementRoutes = require("./placementRoutes");
 const logbookRoutes = require("./logbookRoutes");
 const assessmentRoutes = require("./assessmentRoutes");
-const complianceFormRoutes = require("./complianceFormRoutes");
-const technicalReportRoutes = require("./technicalReportRoutes");
 const visitRoutes = require("./visitRoutes");
 const supervisorRoutes = require("./supervisorRoutes");
 const notificationRoutes = require("./notificationRoutes");
@@ -20,6 +18,7 @@ const invitationRoutes = require("./invitationRoutes");
 const attendanceRoutes = require("./attendanceRoutes");
 const queueRoutes = require("./queueRoutes");
 const auditRoutes = require("./auditRoutes");
+const gradeRoutes = require("./gradeRoutes");
 
 /**
  * Health check endpoint
@@ -56,8 +55,6 @@ router.use("/departments", departmentRoutes);
 router.use("/placements", placementRoutes);
 router.use("/logbooks", logbookRoutes);
 router.use("/assessments", assessmentRoutes);
-router.use("/compliance-forms", complianceFormRoutes);
-router.use("/technical-reports", technicalReportRoutes);
 router.use("/visits", visitRoutes);
 router.use("/supervisors", supervisorRoutes);
 router.use("/notifications", notificationRoutes);
@@ -67,5 +64,6 @@ router.use("/invitations", invitationRoutes);
 router.use("/attendance", attendanceRoutes);
 router.use("/queues", queueRoutes);
 router.use("/audit-logs", auditRoutes);
+router.use("/grades", gradeRoutes);
 
 module.exports = router;

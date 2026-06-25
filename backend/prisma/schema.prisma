@@ -80,29 +80,7 @@ enum VisitStatus {
   cancelled
 }
 
-enum ComplianceFormType {
-  acceptance_letter
-  introduction_letter
-  monthly_clearance
-  indemnity_form
-  itf_form_8
-  school_form
-  final_clearance
-}
 
-enum ComplianceFormStatus {
-  draft
-  submitted
-  approved
-  rejected
-}
-
-enum TechnicalReportStatus {
-  draft
-  submitted
-  approved
-  rejected
-}
 
 enum SupervisorType {
   academic
@@ -253,8 +231,7 @@ model User {
   notifications          Notification[]
   notificationPreference NotificationPreference?
   createdNotifications   Notification[]          @relation("CreatedBy")
-  reviewedComplianceForms ComplianceForm[]       @relation("ComplianceReviewedBy")
-  reviewedTechnicalReports TechnicalReport[]     @relation("TechnicalReportReviewedBy")
+  finalizedGrades          FinalGrade[]           @relation("FinalizedGrades")
   
   @@index([email])
   @@index([role])
@@ -389,8 +366,7 @@ model Student {
   visits                Visit[]
   attendances           Attendance[]
   supervisorAssignments SupervisorAssignment[]
-  complianceForms       ComplianceForm[]
-  technicalReports      TechnicalReport[]
+  finalGrade            FinalGrade?
   
   @@index([userId])
   @@index([matricNumber])
@@ -521,8 +497,7 @@ model Placement {
   visits                Visit[]
   attendances           Attendance[]
   supervisorAssignments SupervisorAssignment[]
-  complianceForms       ComplianceForm[]
-  technicalReports      TechnicalReport[]
+  finalGrade            FinalGrade?
   
   @@index([studentId])
   @@index([status])
@@ -671,11 +646,14 @@ model Visit {
   timezone     String      @default("Africa/Lagos")
   type         VisitType   @default(physical)
   status       VisitStatus @default(scheduled)
-  objective    String?
-  location     String?
-  feedback     String?
-  score        Int?
-  completedAt  DateTime?
+  objective          String?
+  location           String?
+  feedback           String?
+  understandingScore Int?     // 0-5
+  relevanceScore     Int?     // 0-5
+  industryFeedback   Int?     // 0-3
+  professionalism    Int?     // 0-2
+  completedAt        DateTime?
   cancelledAt  DateTime?
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
@@ -691,62 +669,7 @@ model Visit {
   @@map("visits")
 }
 
-model ComplianceForm {
-  id            String               @id @default(uuid())
-  studentId     String
-  student       Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  placementId   String?
-  placement     Placement?           @relation(fields: [placementId], references: [id], onDelete: SetNull)
-  formType      ComplianceFormType
-  title         String?
-  status        ComplianceFormStatus @default(draft)
-  documentName  String?
-  documentPath  String?
-  note          String?
-  submittedAt   DateTime?
-  reviewedById  String?
-  reviewedBy    User?                @relation("ComplianceReviewedBy", fields: [reviewedById], references: [id])
-  reviewedAt    DateTime?
-  reviewComment String?
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
 
-  @@index([studentId])
-  @@index([placementId])
-  @@index([formType])
-  @@index([status])
-  @@index([reviewedById])
-  @@unique([studentId, formType])
-  @@map("compliance_forms")
-}
-
-model TechnicalReport {
-  id            String                @id @default(uuid())
-  studentId     String
-  student       Student               @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  placementId   String?
-  placement     Placement?            @relation(fields: [placementId], references: [id], onDelete: SetNull)
-  title         String?
-  abstract      String?
-  status        TechnicalReportStatus @default(draft)
-  documentName  String?
-  documentPath  String?
-  note          String?
-  submittedAt   DateTime?
-  reviewedById  String?
-  reviewedBy    User?                 @relation("TechnicalReportReviewedBy", fields: [reviewedById], references: [id])
-  reviewedAt    DateTime?
-  reviewComment String?
-  createdAt     DateTime              @default(now())
-  updatedAt     DateTime              @updatedAt
-
-  @@index([studentId])
-  @@index([placementId])
-  @@index([status])
-  @@index([reviewedById])
-  @@unique([studentId])
-  @@map("technical_reports")
-}
 
 model Attendance {
   id         String    @id @default(uuid())
@@ -973,4 +896,39 @@ model AuditLog {
   @@index([createdAt])
   @@index([entity, entityId])
   @@map("audit_logs")
+}
+
+model FinalGrade {
+  id              String    @id @default(uuid())
+  studentId       String    @unique
+  student         Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  placementId     String?   @unique
+  placement       Placement? @relation(fields: [placementId], references: [id], onDelete: SetNull)
+
+  entryCompletion       Int     @default(0) // 0-20
+  industryReview        Int     @default(0) // 0-10
+  submissionConsistency Int     @default(0) // 0-5
+  visitationEval        Int     @default(0) // 0-15
+  attendanceScore       Int     @default(0) // 0-5
+  technical             Int     @default(0) // 0-10
+  initiative            Int     @default(0) // 0-5
+  conduct               Int     @default(0) // 0-5
+  communication         Int     @default(0) // 0-5
+  defenseScore          Int     @default(0) // 0-20
+
+  totalScore  Int     @default(0) // 0-100
+  grade       String  @default("")
+
+  isFinalized   Boolean   @default(false)
+  finalizedById String?
+  finalizedBy   User?     @relation("FinalizedGrades", fields: [finalizedById], references: [id])
+  finalizedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([placementId])
+  @@index([finalizedById])
+  @@index([totalScore])
+  @@map("final_grades")
 }

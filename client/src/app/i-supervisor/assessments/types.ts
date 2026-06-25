@@ -1,12 +1,8 @@
 export interface AssessmentScore {
   technical: number;
   communication: number;
-  punctuality: number;
   initiative: number;
-  teamwork: number;
-  professionalism?: number;
-  problemSolving?: number;
-  adaptability?: number;
+  professionalism: number;
 }
 
 export interface Assessment {
@@ -16,10 +12,10 @@ export interface Assessment {
   status: "pending" | "submitted" | "completed";
   technical: number;
   communication: number;
-  punctuality: number;
   initiative: number;
-  teamwork: number;
-  professionalism?: number;
+  professionalism: number;
+  punctuality?: number;
+  teamwork?: number;
   problemSolving?: number;
   adaptability?: number;
   grade?: string;

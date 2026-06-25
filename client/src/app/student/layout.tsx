@@ -9,9 +9,9 @@ import {
   Users,
   Settings,
   Calendar,
-  FileCheck2,
   FileText,
   Eye,
+  Award,
 } from "lucide-react";
 
 const navItems = [
@@ -19,10 +19,9 @@ const navItems = [
   { title: "Placement", href: "/student/placement", icon: Briefcase },
   { title: "Attendance", href: "/student/attendance", icon: Calendar },
   { title: "Visits", href: "/student/visits", icon: Eye },
-  { title: "Compliance", href: "/student/compliance", icon: FileCheck2 },
-  { title: "Final Report", href: "/student/final-report", icon: FileText },
   { title: "Logbook", href: "/student/logbook", icon: BookOpen },
   { title: "Supervisors", href: "/student/supervisors", icon: Users },
+  { title: "My Grade", href: "/student/grade", icon: Award },
   { title: "Settings", href: "/student/settings", icon: Settings },
 ];
 
