@@ -54,7 +54,9 @@ export function BulkInvitePreviewTable({ rows, onBack }: BulkInvitePreviewTableP
                   {row.valid ? (
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                   ) : (
-                    <XCircle className="h-4 w-4 text-red-500" title={row.errors.join("; ")} />
+                    <span title={row.errors.join("; ")}>
+                      <XCircle className="h-4 w-4 text-red-500" />
+                    </span>
                   )}
                 </td>
               </tr>
