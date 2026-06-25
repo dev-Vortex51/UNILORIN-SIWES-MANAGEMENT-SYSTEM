@@ -171,6 +171,7 @@ export function useAdminInvitations() {
     resendInvitation: resendMutation.mutate,
     cancelInvitation: cancelMutation.mutate,
     bulkCreateInvitations: bulkCreateMutation.mutateAsync,
+    isLoading: invitationsQuery.isLoading,
     isCreating: createMutation.isPending,
     isResending: resendMutation.isPending,
     isCancelling: cancelMutation.isPending,
