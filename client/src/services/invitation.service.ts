@@ -133,6 +133,32 @@ const cleanupExpired = async () => {
   return response.data;
 };
 
+export interface BulkInvitationRow {
+  email: string;
+  role: string;
+  department?: string;
+  matricNumber?: string;
+  level?: number;
+  session?: string;
+  companyName?: string;
+  companyAddress?: string;
+  position?: string;
+  yearsOfExperience?: number;
+}
+
+export interface BulkInvitationResult {
+  total: number;
+  succeeded: Array<{ email: string; role: string; id: string }>;
+  failed: Array<{ row: number; email: string; role: string; error: string }>;
+}
+
+const bulkCreateInvitations = async (
+  invitations: BulkInvitationRow[],
+): Promise<BulkInvitationResult> => {
+  const response = await apiClient.post(`${baseUrl}/bulk`, { invitations });
+  return response.data.data;
+};
+
 export const invitationService = {
   createInvitation,
   getInvitations,
@@ -143,6 +169,7 @@ export const invitationService = {
   cancelInvitation,
   getStatistics,
   cleanupExpired,
+  bulkCreateInvitations,
 };
 
 export default invitationService;

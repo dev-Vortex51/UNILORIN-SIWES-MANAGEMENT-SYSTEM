@@ -34,6 +34,13 @@ router.post(
   invitationController.createInvitation
 );
 
+// Bulk create invitations
+router.post(
+  "/bulk",
+  authorize(USER_ROLES.ADMIN, USER_ROLES.COORDINATOR),
+  invitationController.bulkCreateInvitations
+);
+
 // Get all invitations
 router.get(
   "/",

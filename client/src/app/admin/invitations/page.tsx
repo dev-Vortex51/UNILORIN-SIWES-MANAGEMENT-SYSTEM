@@ -1,13 +1,22 @@
 "use client";
 
+import { useState } from "react";
 import { InvitationCreateDialog } from "./components/InvitationCreateDialog";
 import { InvitationFilters } from "./components/InvitationFilters";
 import { InvitationsHeader } from "./components/InvitationsHeader";
 import { InvitationStats } from "./components/InvitationStats";
 import { InvitationsTable } from "./components/InvitationsTable";
+import { BulkInviteDialog } from "@/components/shared/bulk-invite-dialog";
 import { useAdminInvitations } from "./hooks/useAdminInvitations";
 
+const ADMIN_ROLE_OPTIONS = [
+  { label: "Coordinator", value: "coordinator" },
+  { label: "Academic Supervisor", value: "academic_supervisor" },
+];
+
 export default function AdminInvitationsPage() {
+  const [isBulkOpen, setIsBulkOpen] = useState(false);
+
   const {
     searchQuery,
     setSearchQuery,
@@ -25,6 +34,7 @@ export default function AdminInvitationsPage() {
     createInvitation,
     resendInvitation,
     cancelInvitation,
+    bulkCreateInvitations,
     isLoading,
     isCreating,
     isResending,
@@ -33,7 +43,10 @@ export default function AdminInvitationsPage() {
 
   return (
     <div className="space-y-4 md:space-y-5">
-      <InvitationsHeader onOpenCreate={() => setIsCreateDialogOpen(true)} />
+      <InvitationsHeader
+        onOpenCreate={() => setIsCreateDialogOpen(true)}
+        onOpenBulk={() => setIsBulkOpen(true)}
+      />
 
       <InvitationCreateDialog
         open={isCreateDialogOpen}
@@ -43,6 +56,13 @@ export default function AdminInvitationsPage() {
         departments={departments}
         onSubmit={createInvitation}
         isCreating={isCreating}
+      />
+
+      <BulkInviteDialog
+        open={isBulkOpen}
+        onOpenChange={setIsBulkOpen}
+        roleOptions={ADMIN_ROLE_OPTIONS}
+        onSubmit={bulkCreateInvitations}
       />
 
       <InvitationStats stats={stats} />

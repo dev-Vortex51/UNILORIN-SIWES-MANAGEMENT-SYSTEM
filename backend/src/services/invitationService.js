@@ -735,6 +735,129 @@ const getStatistics = async (user) => {
   }
 };
 
+/**
+ * Create bulk invitations from CSV/JSON array
+ */
+const createBulkInvitations = async (inviterUser, invitationsData) => {
+  const MAX_BATCH = 100;
+
+  if (!Array.isArray(invitationsData) || invitationsData.length === 0) {
+    throw new ApiError(400, "Invitations array is required and must not be empty");
+  }
+
+  if (invitationsData.length > MAX_BATCH) {
+    throw new ApiError(400, `Maximum ${MAX_BATCH} invitations per batch`);
+  }
+
+  const succeeded = [];
+  const failed = [];
+
+  for (let i = 0; i < invitationsData.length; i++) {
+    const row = invitationsData[i];
+    const rowIndex = i + 1;
+
+    try {
+      if (!row.email || !row.role) {
+        throw new ApiError(400, "Email and role are required");
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(row.email)) {
+        throw new ApiError(400, `Invalid email format: ${row.email}`);
+      }
+
+      const validRoles = Object.values(USER_ROLES);
+      if (!validRoles.includes(row.role)) {
+        throw new ApiError(400, `Invalid role: ${row.role}`);
+      }
+
+      validateInvitationPermissions(inviterUser.role, row.role);
+
+      const existingUser = await prisma.user.findUnique({
+        where: { email: row.email.toLowerCase() },
+      });
+      if (existingUser) {
+        throw new ApiError(400, "A user with this email already exists");
+      }
+
+      const pendingInvitation = await prisma.invitation.findFirst({
+        where: {
+          email: row.email.toLowerCase(),
+          status: "pending",
+          expiresAt: { gt: new Date() },
+        },
+      });
+      if (pendingInvitation) {
+        throw new ApiError(400, "An active invitation already exists for this email");
+      }
+
+      let departmentId = row.department || inviterUser.departmentId || inviterUser.department?.id;
+
+      if ([USER_ROLES.STUDENT, USER_ROLES.COORDINATOR].includes(row.role)) {
+        if (!departmentId) {
+          throw new ApiError(400, `Department is required when inviting a ${row.role}`);
+        }
+      }
+
+      const token = generateToken();
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+      const invitation = await prisma.invitation.create({
+        data: {
+          email: row.email.toLowerCase(),
+          role: row.role,
+          token,
+          expiresAt,
+          invitedById: inviterUser.id,
+          invitedByRole: inviterUser.role === USER_ROLES.ADMIN ? "admin" : "coordinator",
+          status: "pending",
+          departmentId,
+          matricNumber: row.matricNumber,
+          level: row.level ? parseInt(row.level, 10) : undefined,
+          session: row.session,
+          companyName: row.companyName,
+          companyAddress: row.companyAddress,
+          position: row.position,
+          yearsOfExperience: row.yearsOfExperience ? parseInt(row.yearsOfExperience, 10) : undefined,
+        },
+      });
+
+      queueInvitationEmail({
+        email: invitation.email,
+        role: invitation.role,
+        token: invitation.token,
+        invitedBy: { firstName: inviterUser.firstName, lastName: inviterUser.lastName },
+      });
+
+      succeeded.push({ email: invitation.email, role: invitation.role, id: invitation.id });
+
+      notificationService.createNotification({
+        recipientId: inviterUser.id,
+        type: NOTIFICATION_TYPES.INVITE_SENT,
+        title: "Bulk Invitation Sent",
+        message: `Invitation sent to ${invitation.email} for role ${invitation.role}.`,
+        priority: "low",
+        relatedModel: "Invitation",
+        relatedId: invitation.id,
+        createdById: inviterUser.id,
+      }).catch((err) => logger.warn(`Bulk invite notification failed: ${err.message}`));
+    } catch (error) {
+      failed.push({
+        row: rowIndex,
+        email: row.email || "(missing)",
+        role: row.role || "(missing)",
+        error: error.message || "Unknown error",
+      });
+    }
+  }
+
+  logger.info(
+    `Bulk invitations created: ${succeeded.length} succeeded, ${failed.length} failed (by ${inviterUser.email})`,
+  );
+
+  return { total: invitationsData.length, succeeded, failed };
+};
+
 module.exports = {
   createInvitation,
   validateInvitationPermissions,
@@ -747,4 +870,5 @@ module.exports = {
   cleanupExpired,
   getStatistics,
   generateToken,
+  createBulkInvitations,
 };

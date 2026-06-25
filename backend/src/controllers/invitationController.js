@@ -154,6 +154,27 @@ exports.getStatistics = async (req, res, next) => {
   }
 };
 
+exports.bulkCreateInvitations = async (req, res, next) => {
+  try {
+    const { invitations } = req.body;
+
+    if (!invitations) {
+      throw new ApiError(400, "Request body must contain an 'invitations' array");
+    }
+
+    const result = await invitationService.createBulkInvitations(
+      req.user,
+      invitations,
+    );
+
+    res.status(201).json(
+      formatResponse(true, "Bulk invitations processed", result),
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.cleanupExpired = async (req, res, next) => {
   try {
     const count = await invitationService.cleanupExpired();

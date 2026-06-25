@@ -3,7 +3,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUrlSearchState } from "@/hooks/useUrlSearchState";
 import adminService from "@/services/admin.service";
-import invitationService from "@/services/invitation.service";
+import invitationService, {
+  type BulkInvitationRow,
+} from "@/services/invitation.service";
 import type {
   Department,
   Invitation,
@@ -51,6 +53,15 @@ export function useAdminInvitations() {
   const statsQuery = useQuery({
     queryKey: ["invitation-stats"],
     queryFn: () => invitationService.getStatistics(),
+  });
+
+  const bulkCreateMutation = useMutation({
+    mutationFn: (invitations: BulkInvitationRow[]) =>
+      invitationService.bulkCreateInvitations(invitations),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["invitations"] });
+      queryClient.invalidateQueries({ queryKey: ["invitation-stats"] });
+    },
   });
 
   const createMutation = useMutation({
@@ -159,9 +170,10 @@ export function useAdminInvitations() {
     createInvitation,
     resendInvitation: resendMutation.mutate,
     cancelInvitation: cancelMutation.mutate,
-    isLoading: invitationsQuery.isLoading,
+    bulkCreateInvitations: bulkCreateMutation.mutateAsync,
     isCreating: createMutation.isPending,
     isResending: resendMutation.isPending,
     isCancelling: cancelMutation.isPending,
+    isBulkCreating: bulkCreateMutation.isPending,
   };
 }
