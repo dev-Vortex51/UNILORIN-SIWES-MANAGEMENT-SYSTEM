@@ -81,6 +81,16 @@ const createInvitation = async (inviterUser, invitationData) => {
       }
     }
 
+    if (departmentId) {
+      const department = await prisma.department.findUnique({
+        where: { id: departmentId },
+        select: { id: true },
+      });
+      if (!department) {
+        throw new ApiError(400, `Department with ID "${departmentId}" does not exist`);
+      }
+    }
+
     // Generate secure token
     const token = generateToken();
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
@@ -796,6 +806,16 @@ const createBulkInvitations = async (inviterUser, invitationsData) => {
       if ([USER_ROLES.STUDENT, USER_ROLES.COORDINATOR].includes(row.role)) {
         if (!departmentId) {
           throw new ApiError(400, `Department is required when inviting a ${row.role}`);
+        }
+      }
+
+      if (departmentId) {
+        const department = await prisma.department.findUnique({
+          where: { id: departmentId },
+          select: { id: true },
+        });
+        if (!department) {
+          throw new ApiError(400, `Department with ID "${departmentId}" does not exist`);
         }
       }
 
