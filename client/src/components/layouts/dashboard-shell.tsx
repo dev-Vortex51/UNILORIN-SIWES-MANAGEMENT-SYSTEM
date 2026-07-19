@@ -20,7 +20,6 @@ import {
   UnstyledButton,
   Box,
   ScrollArea,
-  Image,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import type { LucideIcon } from "lucide-react";
@@ -169,16 +168,11 @@ function DashboardShell({ children, navItems, title }: DashboardShellProps) {
         <div className={classes.navbarMain}>
           <Group className={classes.header} justify="space-between">
             <Group gap="sm" wrap="nowrap">
-              <Image
-                src="/icons/header-logo.svg"
-                alt="ITMS Logo"
-                // h={150}
-                fit="contain"
-                mx="auto"
-                // mb={8}
-              />
+              <Box className={classes.brandMark}>
+                <GraduationCap size={16} strokeWidth={2} />
+              </Box>
               <Box>
-                <Text className={classes.brandTitle}>USM PORTAL</Text>
+                <Text className={classes.brandTitle}>PORTAL</Text>
               </Box>
             </Group>
             <Group gap="xs">
