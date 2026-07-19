@@ -79,9 +79,9 @@ export default function LoginPage() {
           // h={80}
           fit="contain"
           mx="auto"
-          mb="md"
+          // mb="sm"
         />
-        <Paper withBorder p={30} mt={30} radius="md" pos="relative">
+        <Paper withBorder p={30} mt={10} radius="md" pos="relative">
           {isLoading ? (
             <Text size="xs" c="dimmed" mb="sm">
               Checking existing session...
