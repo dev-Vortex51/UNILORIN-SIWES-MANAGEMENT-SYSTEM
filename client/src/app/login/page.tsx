@@ -75,12 +75,20 @@ export default function LoginPage() {
         <Image
           src="/icons/app-icon.svg"
           alt="ITMS Logo"
-          h={100}
+          h={300}
           fit="contain"
           mx="auto"
           // mb={8}
         />
-        <Paper withBorder p={30} mt={-30} radius="md" pos="relative">
+        <Title ta="center" className={classes.title} mt="md">
+          Unilorin SIWES Management System
+        </Title>
+
+        <Text className={classes.subtitle} size="sm">
+          Welcome back!!
+        </Text>
+
+        <Paper withBorder p={30} radius="md" pos="relative">
           {isLoading ? (
             <Text size="xs" c="dimmed" mb="sm">
               Checking existing session...
