@@ -37,6 +37,7 @@ export function PasswordFields({
               value={formData.password}
               onChange={(event) => onFieldChange("password", event.target.value)}
               required
+              autocomplete="new-password"
             />
             <Button
               type="button"
@@ -63,6 +64,7 @@ export function PasswordFields({
               value={formData.confirmPassword}
               onChange={(event) => onFieldChange("confirmPassword", event.target.value)}
               required
+              autocomplete="new-password"
             />
             <Button
               type="button"
