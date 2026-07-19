@@ -75,8 +75,8 @@ export default function LoginPage() {
         <Image
           src="/icons/login-logo.svg"
           alt="ITMS Logo"
-          w={80}
-          h={80}
+          // w={80}
+          // h={80}
           fit="contain"
           mx="auto"
           mb="md"
