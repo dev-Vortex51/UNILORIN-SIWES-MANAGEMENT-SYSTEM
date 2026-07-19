@@ -73,7 +73,7 @@ export default function LoginPage() {
     <div className="flex min-h-[100dvh] items-center justify-center px-4">
       <Container size={420} m={0}>
         <Image
-          src="/icons/login-logo.svg"
+          src="/icons/app-icon.svg"
           alt="ITMS Logo"
           // h={200}
           fit="contain"
