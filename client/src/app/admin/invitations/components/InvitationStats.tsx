@@ -8,7 +8,7 @@ interface InvitationStatsProps {
 export function InvitationStats({ stats }: InvitationStatsProps) {
   const metrics = [
     {
-      label: "Total Invitations",
+      label: "All Invitations",
       value: stats.total,
       hint: "All invitation records",
       trend: "neutral" as const,
